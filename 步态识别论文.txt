@@ -1,0 +1,1513 @@
+爱思唯尔标志
+期刊与书籍
+
+帮助
+搜索
+我的账户
+登录
+
+下载完整期刊
+Search ScienceDirect
+Search ScienceDirect
+
+大纲
+摘要
+关键词
+1. 引言
+2. 方法
+3. 结果
+4. 讨论
+5. 结论
+CRediT 作者贡献声明
+伦理声明
+利益竞争声明
+致谢
+附录A。补充数据
+数据可用性
+参考文献
+
+展示完整大纲
+引用者（1）
+数字（12）
+图1。四种步态的示意图：（a）正常行走;（b）拖拽步态;（c）......
+图2。拟议框架概述
+图3。惯性测量单元（IMU）传感器布置示意图
+图4。鞋垫脚压传感器示意图
+图5。拖拽步态和偏瘫步态的实验性装置
+图6。标签制作过程示意
+
+显示更多6个手办
+积分榜（13）
+表1
+表2
+表3
+表4
+表5
+表6
+
+显示所有表格
+附加内容（3）
+
+全部下载
+多媒体组件1
+多媒体组件2
+多媒体组件3
+爱思唯尔
+人工智能的工程应用
+第158卷，B部分，2025年10月22日，111561
+人工智能的工程应用
+基于深度学习的步态分割扩展至使用惯性测量单元的异常模式
+作者链接 打开覆盖面板
+赵长玉
+,
+元剑金
+,
+若定安
+,
+内富弘隆
+,三宅义弘
+
+显示更多
+
+加入门德利
+
+分享
+
+引用
+https://doi.org/10.1016/j.engappai.2025.111561
+获取版权和内容
+在知识共享许可下
+开放获取
+摘要
+基于惯性测量单元（IMU）的步态分段在医疗应用中被广泛应用，并在识别步态阶段方面起着关键作用。然而，现有方法主要关注正常步态模式，其适用范围限制在小步态、拖拽步态和绕行步态等病理性情况。本研究提出一种新型步态分段框架，能够有效处理正常和异常步态模式，从而提升医学应用的推广性。我们的主要贡献是通过两种方式将步态分段扩展到异常步态模式：（1）我们提出新的步态分段定义，以确保正常步态和异常步态得到平等对待，促进更包容的方法。（2）我们还提出了一种名为步态分割神经网络（GaitSeg Net）的新型网络，这是一种深度学习模型，集成卷积神经网络、双向长短期记忆和变换器以实现稳健特征提取。该架构采用宽核卷积神经网络（CNN）来缓解噪声相关问题，并采用卷积前馈层过滤无关信息，显著提升了分割准确性。我们记录了一个包含各种正常和异常步态的新数据集，用于训练和验证。实验结果显示，GaitSeg Net优于现有方法，获得了98.16%的F1评分。与之前的研究相比，我们的方法将步行和跑步任务的准确率从96.88%提升到97.50%。此外，我们的模型对异常步态保持了高准确率（小步步态：96.1%，拖曳步态：96.6%，环绕步态：97.6%），证实了其稳健性。这些结果凸显了我们方法在将步态分段扩展到病理运动模式方面的潜力，标志着人工智能应用和生物医学工程领域的重大进展。
+上一篇文章 in issue
+下一篇文章 in issue
+关键词
+深度学习步态分割步态分析异常步态惯性测量单元
+1. 引言
+步态是多个领域中具有关键应用的重要生物学因素（Harris 等，2022），尤其在医学领域。研究报告显示，基础步态特征与下半身运动障碍之间存在强烈相关性（Stamatakis等，2011;Morris 等，2016;Cicirelli 等，2022）。康复期间步态分析的结果是评估患者康复程度的重要指标（Liu等，2009;Leddy等，2011）。随着技术进步，步态分析已被用于控制可穿戴外骨骼机器人（Huo等，2014;Chaparro-Cárdenas 等，2018;Chen 等，2021），这些帮助患者进行康复培训，并简化老年人爬楼梯等任务。近年来，惯性测量单元（IMU）——包括三轴加速度计、陀螺仪和磁力计——被广泛用于步态分析（Seel 等，2014;Gujarathi 和 Bhole，2019）因其便携性和便利性（见表1）。
+表1。步态分析不同方法的比较。
+
+方法	测量信号	学习	优点	缺点
+IMU	加速度，角速度	Seel 等人（2014）;《古吉拉特语》和《博莱》（2019）;堀等人（2019）	便携性;方便;运动空间无限制;实惠	低精度
+力场板	地面反作用力	萨瑟兰（2005）;Liu 等人（2010）;金刚和富冢（2009）;Abinaya 等人，（2012）	高精度	对环境敏感;不方便;代价高昂
+光学动作捕捉	标记的三维位置	Mihradi 等人（2011）;Wang 等（2021）	高精度	运动空间受限;不方便;代价高昂
+步态分段（或足部接触检测）是步态分析的一个关键分支，在识别不同的步态阶段方面起着至关重要的作用。 Agostini等人（2013）报告称，一般步态可分为四个阶段：脚跟接触（H）、平足接触（F）、推开（P;也称为脚跟离开）和肢体摆动（S）。然而，这种相位划分并不总是适用于异常步态，异常步态通常涉及相位外观顺序的变化或某些相位的缺失。三种具有挑战性的异常步态模式包括拖拽步态、偏瘫步态（Woolley， 2001）和帕金森步态（Sofuwa等，2005）。在拖行步态中，脚在无摆动阶段始终与地面保持接触（见图1（b））;在偏瘫步态中，摆动阶段表现为脚在空中以圆形运动（见图1（c））;而在帕金森步态中，患者采取小而断续的步伐，脚趾和脚跟几乎同时着陆（见图1（d））。
+图1
+下载：下载高分辨率图片（793KB）
+下载：下载全尺寸图片
+图1。四种步态的示意图：（a）正常行走;（b）拖拽步态;（c）半瘫（环绕）步态;以及（d）帕金森步态（小步态）。
+
+多项研究聚焦于健康参与者的步态分段。他们从运动学角度开发了一系列基于规则的方法，以实现高精度的分割。Kim和Lee（2017）提出了一种脚-地接触检测算法，计算连接在下肢的五个IMU的朝向，以确定参与者的精确步态阶段。该算法成功检测到四个不同行走速度下的接触相位。Hori等（2019）和毛等（2021）采用类似方法，利用IMU附着的步态叉进行步态阶段分段。他们发现，正常行走时的角速度（由陀螺仪测量）往往形成小峰和大峰，这些波谷分别对应脚跟着地和脚趾着地。然而，这种基于规则的方法并不够稳健，只能应用于正常行走，无法应用于其他行走模式，如走楼梯、坡地或异常步态。
+近年来，端到端深度学习方法被探索，以潜在应用于各种步态类型。 Sui 等人（2020）开发了一种基于卷积神经网络（CNN）的方法，用于识别步行和跑步中的步态阶段。 Bauman和Brandon（2022）采用五个基于长短期记忆（LSTM）的模型，检测在直线地面行走和爬楼梯时的步态阶段。Shah等人（2022）尝试使用身体佩戴的IMU估算行走表面。然而，现有研究仅限于健康受试者步态的分析。此外，多位研究人员采用了独特的方法来区分特定症状。Bikias 等人（2021）利用卷积神经（CNN）识别了帕金森病的一个特定阶段，称为步态冻结（FoG）。然而，他们的方法无法估计其他步态模式。
+迄今为止，尚未实现能够处理异常步态的分段方法。此类方法有望显著扩展医学诊断中的应用。本研究旨在建立一个从正常步态延伸至各种步态障碍的步态分段框架。我们从步态模式的角度分析了三种异常步态：小步态、拖步和绕行步态。帕金森病患者常表现出小步态步态，某些偏瘫患者倾向于表现绕行步态，少数膝盖受伤患者可能表现出拖拽步态。
+我们提出了一种新的分段定义（移动和停止），以推广该问题在正常和异常步态上。新数据集已记录，包含多种正常和异常步态模式，供实验分析使用。最后，我们提出了一个新颖的网络GaitSeg Net，结合了深度学习中常用的特征提取基本模块。具体来说，前馈部分采用一维卷积层，以实现步态分割任务中的更高精度。
+结果显示，与其他基线模型相比，所提出的GaitSeg Net表现最佳，获得了98.16%的F1评分。此外，正常步态的表现（步行和跑步的平均准确率为97.4%）高于之前研究报告的96.88%。此外，异常步态的准确率并未显著下降于正常步态（小步步态：96.2%;拖曳步态：97.0%;绕行步态：97.5%），表明分段方法可以扩展到异常步态模式。
+本文其余部分的组织如下。第二部分介绍数据集、深度学习模型和评估指标的细节。第三部分呈现实验结果，第四部分将这些结果与以往研究进行比较。最后，结论总结见第五部分。此外，手稿中使用的缩写总结见表2。
+表2。缩写。
+
+缩写	完整格式
+IMU	惯性测量单位
+CNN	卷积神经网络
+BiLSTM	双向长短期记忆
+FGCD	地面接触检测
+LSTM	长短期记忆
+雾	步态冻结
+EKF	扩展卡尔曼滤波器
+RNN（注册营养师）	循环神经网络
+MDE	平均检测误差
+H	脚跟接触
+F	平足接触
+P	推开，也称为脚跟
+S	肢体摆动
+2. 方法
+第2.1节描述了问题陈述，第2.2节概述了提出的框架。数据收集流程详见第2.3节。IMU数据的预处理在第2.4节输入数据预处理，2.5节压力传感器注释中有说明。第2.6节介绍了拟议的GaitSeg Net，评估指标在第2.7节中呈现。
+2.1. 问题陈述
+如第1节所述，使用H、F、P和S来评估正常步态（Agostini等，2013）。然而，这种阶段分类无法推广到除步行外的异常步态或其他动作，因为这些动作可能不完全相同，或者在某些阶段缺失。例如，在小步步态中，H和F几乎同时发生，而拖步步态中，脚在整个动作过程中保持与地面接触，没有摆动相位。因此，需要一个更广义的定义，以实现正常和异常步态的分段。
+我们用二元分类方法将分割分为“移动”状态和“停止状态”。1表示脚相对于世界坐标系运动，0表示脚静止。脚跟和脚趾状态被分别定义，以确保异常步态和正常步态得到同等对待。
+从IMU获得的数据表示为
+， 其中
+表示一个特定的时间窗口，
+表示IMU数量，
+表示每个IMU的数据通道数量。目标是估算在持续时间窗口内的“移动”或“停止”状态
+记作
+， 其中
+.脚跟也是一样
+以及整个脚部
+.在本研究中，
+= 300，
+= 3，且
+= 10。
+2.2. 框架大纲
+图2展示了所提出的框架，包括数据记录、IMU预处理、压力传感器注释和深度学习模型。
+图2
+下载：下载高分辨率图片（446KB）
+下载：下载全尺寸图片
+图2。拟议框架概述。
+
+2.3. 数据收集
+本节介绍参与者（第2.3.1节）、测量系统（第2.3.2节）、运动任务（第2.3.3节）和实验程序（第2.3.4节）。
+2.3.1. 研究参与者
+我们的数据集包含16名参与者（8名健康个体和8名伪受试者）。平均体重为66.81±11.79公斤，平均年龄为24.33±1.82，参与者为15名男性和1名女性。东京工业大学伦理委员会批准了评估方案，所有参与者均提供了书面知情同意。
+2.3.2. 测量系统
+2.3.2.1. IMU传感器
+典型的IMU传感器提供三种测量方式：加速度计的加速度（acc）、陀螺仪的角速度（陀螺）以及 磁力计的磁场数据（mag）。在这项研究中，我们使用了便携式、无线且轻量化的AMWS020 IMU传感器（ATR-Promotions Inc.），该传感器专门针对测量运动状态进行了优化。加速器的振幅可达30G，陀螺仪最高可达4000 DPS。实验期间采样率被设定为100 Hz。数据以离线模式保存到传感器终端，实验完成后导出以防止数据丢失。整个数据集大约包含3,177,000个数据帧。
+根据之前的研究（Hossain等，2023），放置在脚上的IMU传感器会因完全静止而发生信息丢失。相反，放置在大腿上的传感器容易因运动过程中肌肉的剧烈运动而产生过多噪音，影响传感器。为解决这些限制，我们在左侧、右侧腿部及骨盆上安装了IMU传感器，如图3所示。
+图3
+下载：下载高分辨率图片（434KB）
+下载：下载全尺寸图片
+图3。惯性测量单元（IMU）传感器的位置示意图。
+
+追踪和陀螺仪数值准确，而磁力读数更容易受到环境干扰。在开始实验前，IMU传感器进行了校准，追踪、陀螺仪和磁力测量的误差模型表示如下：
+(1)
+其中
+表示校准后的ACC数据;
+表示原始数据;
+修改与传感器框架对齐的轴线;
+修改比例因子;且
+修改偏置。
+(2)
+其中
+表示校准后的陀螺仪数据;
+表示原始数据;
+修改与传感器框架对齐的轴线;
+修改比例因子;且
+修改偏置。
+(3)
+其中
+表示校准弹匣数据;
+表示原始数据;
+修改与传感器框架对齐的轴;以及
+修改偏置。
+误差模型参数基于既定标准确定，详情见Tedaldi等（2014）提供。
+2.3.2.2. 压力传感器
+我们使用可穿戴足部压力传感器（Moticon）测量鞋底与地面的接触，并协助标记移动和停止状态。与以往研究中使用的光学动作捕捉系统（Mihradi等，2011）不同，足部压力传感器不限制参与者的运动空间，且可适应可变的运动高度（如爬楼梯或坡道）。该传感器集成每英尺16个压力单元，并配有位于脚中央的IMU传感器（见图4）。
+图4
+下载：下载高分辨率图片（419KB）
+下载：下载全尺寸图片
+图4。鞋垫脚压传感器示意图。
+
+前脚掌区和后足区分别对应#9–#16和#1–#6。每个压力感应单元的分辨率为0.25
+最大射程为50
+. 采样率设置为100 Hz，与IMU传感器一致。实验前，压力传感器通过参与者的体重和一系列简单动作（如慢行、站立和重心前后移动）进行校准以解决漂移误差。
+2.3.3. 运动任务
+我们记录了七种适合健康受试者的运动方式，包括步行、跑步、跳跃、活动范围（ROM）练习、爬楼梯、斜坡行走和自由式动作。在步行方面，参与者被指导在30米长、20米宽的户外区域内以任意速度和方向行走。跑步则要求参与者以任意速度来回奔跑。跳跃时，参与者被指导直立跳跃并进行青蛙跳以及左右腿跳跃。在活动范围测试中，参与者被要求进行基本的原地动作，如深蹲、腿部拉伸以及将重心从前移到后。在楼梯攀登任务中，参与者被要求在两段楼梯上上下行走，脚底尽可能贴近台阶。在坡面上，参与者被指示在两个不同坡度上上下移动。自由式动作由实验者完成，有些表演复杂舞蹈，另一些则原地练习太极。这些动作未被重复进行，以评估模型的稳健性。
+伪受试者记录的三种代表性动作——拖拽、绕行和小步步态——在异常步态中最为模糊且难以推断。在拖拽步态中，伪受试者被指示使受影响的脚持续接触地面行走（见图1（b））。受试者的膝盖被强制固定，以模拟膝盖无法弯曲，如图5所示。在实验前阶段，实验人员被指示在动作捕捉系统环境中模拟异常步态模式，以验证模拟的准确性和有效性。更多细节见补充材料A。
+图5
+下载：下载高分辨率图像（408KB）
+下载：下载全尺寸图片
+图5。拖拽和偏瘫步态的实验装置。（a）膝带。（b）安装。
+
+在环绕步态中，伪受试者被指示在摆动阶段避免弯曲膝盖，并在控制阶段以圆周运动移动腿部（见图1（c））。对于小步步态，伪受试者被要求模拟前倾姿势、缓慢动作和缩短步幅（图1（d））。
+正常步行已通过以往研究中的统计步行模型得到验证（Ji和Pachi，2005;Aloisio等，2024）。展示所有动作中行走频率的直方图可在补充材料B中提供。
+2.3.4. 实验程序
+我们为每个动作记录了三次试验，每次约3分钟。在开始动作前，参与者被指示原地跳跃以同步IMU和压力传感器的时序。
+2.4. 输入数据预处理
+原始IMU数据偶尔因蓝牙传输问题出现缺失值，采用线性插值方法填充空白时间戳。虽然加速和陀螺数据总体可靠，但磁场数据更易受环境干扰影响。此外，由于生产工艺的差异，不同IMU间观察到原始磁场数据，尤其是振幅上的不一致。这些不一致阻碍了模型学习和泛化。磁场数据的主要贡献在于解决IMU传感器水平方向的位置不确定性，从而实现更准确的IMU位置估计。因此，我们应用了扩展卡尔曼滤波器（EKF）算法（Sabatelli 等，2013）来结合这三种数据类型（
+并推导IMU方向信息（
+）用于模型输入。与原生磁力数据相比，位置数据的大小分布更为均衡，从而提升了模型学习和泛化能力。使用EKF算法获得的定向信息可表示为
+(4)
+其中 t 表示时间范围。
+2.5. 压力传感器注释
+原生压力传感器数据由于蓝牙传输问题存在少量缺失信息，空白时间戳通过线性插值填充。随后，计算了前脚掌和后足间隔的压力总和。如果前脚掌间隔的压力总和超过某个阈值（“全脚”为0.5，脚趾和“脚跟”为0.2“），则该脚被视为”停止“状态，否则则处于”移动“状态。任何快速的相位变化或“突变”都被去除;也就是说，如果该脚在停止或移动状态中停留时间少于0.05秒，则不考虑相位反转。图6展示了标记过程的示例，蓝线表示压力单位的总和，黄色线表示阈值，红线表示标签（0表示移动，1表示停止）。图7展示了一个示例数据集。
+图6
+下载：下载高分辨率图片（392KB）
+下载：下载全尺寸图片
+图6。标签制作过程示意图。
+
+图7
+下载：下载高分辨率图片（476KB）
+下载：下载全尺寸图片
+图7。示例数据集。（a）行走。（b）拖拽的步态。
+
+2.6. 深度学习模型
+模型架构由两个主要组成部分组成：特征提取和分类。在特征提取方面，我们选择了四种代表性方法：CNN、LSTM、双向LSTM（BiLSTM）和变换器。在分类过程中，我们采用了多层感知器，随后采用了最后的SoftMax层。图8展示了模型结构，详细的超参数设置总结见表3。用于训练的参数设置见表4。
+图8
+下载：下载高分辨率图片（601KB）
+下载：下载全尺寸图片
+图8。深度学习模型的结构。（a） 卷积神经网络（CNN）。（b） 长短期记忆（LSTM）。（c） 双向LSTM（BiLSTM）。（d） 变形金刚。
+
+表3。深度学习模型的超参数设置。
+
+CNN	LSTM	BiLSTM	变压器	GaitSeg 网络
+Conv_1D_1：out_channels = 72，kernel_size
+= 3，
+填充 = 1	LSTM_1：hidden_dim = 200，dropout
+= 0.2	BiLSTM_1：hidden_dim = 200
+掉球 = 0.2	嵌入：特征尺寸 = 250	Conv_1D_1， 2， 3： out_channels = 72， 144， 288
+kernel_size = 21
+填充 = 1
+Max_Pool_1：kernel_size= （2， 1）	Encoding_1：d_model = 250，nhead
+= 10，dropout
+= 0.1
+dim = 2048
+前馈 = 线性	Max_Pool_1,2,3：kernel_size=（2,1）
+Conv_1D_2: out_channels = 144
+kernel_size = 3,
+padding = 1	BiLSTM_1: hidden_dim = 200,
+dropout = 0.1
+Max_Pool_2 kernel_size= (2, 1)	LSTM_2: hidden_dim = 200,
+dropout = 0.2	BiLSTM_2: hidden_dim = 200
+dropout = 0.2	Encoding_2: d_model = 250,
+nhead = 10,
+dropout = 0.1
+dim = 2048
+feedforward = linear	BiLSTM_2: hidden_dim = 200,
+dropout = 0.1
+Conv_1D_3: out_channels = 288,
+kernel_size = 3,
+padding = 1	Embedding: feature size = 250
+Max_Pool_3: kernel_size= (2, 1)	Encoding_1: d_model = 250,
+nhead = 10,
+dropout = 0.1
+dim = 12
+feedforward = Conv1D
+Linear_1：in_features = 144，out_features
+= 400	Linear_1：in_features = 200
+out_features = 400	Linear_1：in_features = 400
+out_features = 800	解码器：in_features = 250
+out_features = 12	Encoding_2：d_model = 250，nhead
+= 10，dropout
+= 0.1
+dim = 12
+前馈 = Conv1D
+Linear_2：in_features = 400
+out_features = 2	Linear_2：in_features = 400
+out_features = 2	Linear_2：in_features = 800
+out_features = 2	解码器：in_features = 250
+out_features = 12
+表4。训练参数设置。
+
+参数	价值
+学习速率	0.001（每20个纪元后减半）
+纪元	60
+批次大小	24
+优化函数	亚当
+损失函数	交叉熵损失
+2.6.1. 基础深度学习模型
+CNN、LSTM和Transformer被用作步态分割任务的基本模型。卷积神经网络已被应用于各种图像处理任务（Ciresan 等，2011;Zhang 等，2017）。近年来，利用IMU传感器进行的开创性研究已利用CNN进行步态相位检测任务。（Delgado-Escano 等，2018;Su 和 Smith，2020;Huang 等，2021）。直观上，步态分段与时间序列信息密切相关，且已有研究（Sui 等，2020;Sarshar 等，2021）证明LSTM能够在该任务中实现高性能。近年来，变换器模型在多个领域蓬勃发展，并开始应用于步态分割任务（Tao等，2023），这得益于其注意力机制的优越性。
+2.6.2. CNN-BiLSTM变换器的融合
+我们结合了CNN、LSTM和变压器，创建了聚变架构（见图9）。输入的IMU数据首先经过三层Conv1D，然后是BiLSTM，最后通过变压器输出最终分类结果。这种集成提升了模型提取特征的能力，并促进了正常和异常行走的同时处理。拟议聚变模型与基础模型的比较见第3.1节。
+图9
+下载：下载高分辨率图片（513KB）
+下载：下载全尺寸图片
+图9。GaitSeg 网络的详细结构。
+
+2.6.3. 宽内核 CNN
+我们在模型开头使用宽核卷积神经网络来解决噪声相关问题。来自IMU的原始加速度数据通常噪声较大，仅仅应用滤波器就很难确定最佳滤波器超参数，尤其是在处理不同类型运动或不同厂商的IMU产品时。以往研究（Gao 等，2019;Sui 等，2020）通常使用较小的核粒尺寸（3或5），这使得网络对噪声高度敏感，常常导致相位估计不准确。我们发现，增加卷积神经网络的核粒大小有助于减轻噪声影响并提高估计准确性。本研究采用了21粒粒，宽粒CNN的消融研究结果见第3.6节。
+2.6.4. Efficiently processing with Conv1D
+In a previous study (Vaswani et al., 2017), a linear layer was used in the feedforward part to process information, extending the receptive field across the entire time window. However, in the gait segmentation task, as illustrated in Fig. 10 (left), phase changes occur within a limited time window and are often surrounded by useless signal changes. Using a linear layer inevitably processes this useless information, leading to lower performance. Ideally, the receptive field is constrained to focus on a smaller range and concentrate on useful information, as shown in Fig. 10 (right). To address this issue, we replaced the linear layer in the feedforward part with a Conv1D layer. The effectiveness of this approach is validated in Section 3.5.
+Fig. 10
+Download: Download high-res image (499KB)
+Download: Download full-size image
+Fig. 10. Illustration of useful and useless information in phase change.
+
+2.7. Evaluation indices
+We treated the problem of gait segmentation as a binary classification task (1 for movement and 0 for stationary). Therefore, we used accuracy, recall, precision, and the F-1 score to evaluate the results. The four possible outcomes in binary classification include true positive (TP), true negative (TN), false positive (FP), and false negative (FN). The accuracy is calculated as
+(13)
+The recall is given by
+(14)
+The precision is defined as
+(15)
+The F1 score is calculated as
+(16)
+Furthermore, we evaluated the mean detection error (MDE), which measures the temporal difference between the predicted transition and the ground truth. It is expressed as
+(17)
+其中
+表示总转移次数，
+表示预测转变的时间范围，
+表示地面-真实的过渡。
+3. 结果
+图11展示了预测结果和实际情况。补充材料中提供了实时演示。不同模型的性能比较见第3.1节，不同动作的性能则在第3.2节介绍。第3.3节 输入信号的消融研究，3.4 运动多样性的消融研究，3.5 模型结构的消融研究，3.6 宽核消融研究 CNN总结了聚焦输入信号、运动多样性、模型结构和Conv1D使用方面的消融研究。
+图11
+下载：下载高分辨率图像（1004KB）
+下载：下载全尺寸图片
+图11。预测结果与实地情况的对比。
+
+3.1. 模型评估
+我们采用了8折交叉验证来评估模型的准确性。此外，我们还分别评估了脚趾、脚跟和全脚的移动和停止案例。表5列出了模型的准确性、召回率、精度和F1分数。
+表5。不同深度学习模型的评估。
+
+空牢房	准确性	召回	精度	F1 积分
+托	跟随	全脚	托	跟随	全脚	托	跟随	全脚	托	跟随	全脚
+CNN	94.85 %	92.29 %	96.84 %	91.12 %	92.70 %	97.33 %	95.40 %	94.83 %	97.89 %	93.21 %	93.75 %	97.61 %
+变压器	95.29 %	93.07 %	97.14 %	91.98 %	93.54 %	97.67 %	95.56 %	95.41 %	98.00 %	93.74 %	94.47 %	97.84 %
+LSTM	95.46 %	93.46 %	97.25 %	92.72 %	93.93 %	97.86 %	95.30 %	95.64 %	97.97 %	94.00 %	94.78 %	97.91 %
+BiLSTM	95.77 %	93.90 %	97.56 %	93.06 %	94.53 %	98.05 %	95.57 %	95.93 %	98.24 %	94.30 %	95.23 %	98.15 %
+GaitSeg 网络	95.73 %	93.83 %	97.57 %	92.72 %	94.36 %	98.11 %	95.71 %	96.27 %	98.20 %	94.19 %	95.31 %	98.16 %
+LSTM的性能优于变压器。这是因为，尽管变压器在时间序列中具有较长的视角范围，但步态分割信息仅依赖较小的时间范围，且与之前较长的时间范围无关系。由于采用“未来”信息，BiLSTM的表现优于LSTM。BiLSTM和步态分隔网在表4中表现非常接近。因此，我们在表6中比较了最具挑战性的案例（未被观察的受试者异常行走）中的这两种情况。如表所示，Gaitseg Net在异常行走病例中表现更好。虽然BiLSTM对行走等正常动作有效，但在不规则情况下难以提取特征。相比之下，拟议的盖特塞格网络通过不同机制提取这些特征，从而实现更好的性能。此外，整只脚的计算精度最高，其次是脚跟和脚趾。这是因为脚趾和脚跟经常改变运动状态，且原始IMU信号中也表现出类似变化，使得它们更为模糊。
+表6。变形者案例（看不见的受试者异常行走）中BiLSTM与Gaitseg Net的比较。
+
+空牢房	托	跟随	完全
+BiLSTM	盖特塞格网	BiLSTM	盖特塞格网	BiLSTM	盖特塞格网
+DG	87.9 %	88.9 %	92.9 %	94.1 %	96.4 %	96.6 %
+SG	89.8 %	91.1 %	94.4 %	94.9 %	97.3 %	97.6 %
+CG	88.6 %	88.9 %	90.3 %	90.2 %	96.0 %	96.1 %
+最后，我们复制了三项先前研究的方法，并在数据集上使用F1评分进行比较，如表7所示。如表所示，我们的模型优于以往方法。Sarshar 等人（2021）使用了五层叠加的 LSTM，而 Romijnders 等人（2022）则使用时间卷积网络（TCN）进行预测。在这两种情况下，特征提取能力都受限于其网络结构的简单性。Sui 等人（2020）采用了一种基于 CNN 的专用架构，称为 U-net，取得了更好的结果。通过整合CNN、BiLSTM和变换器，我们提出的方法展现出更优的性能。
+表7。F1评分与以往研究的比较。
+
+方法	托	跟随	完全
+Sarshar 等人。	93.62 %	94.52 %	97.77 %
+Romijnders 等人。	93.63 %	94.66 %	97.96 %
+隋等人。	93.81 %	94.97 %	97.95 %
+盖特塞格网	94.19 %	95.31 %	98.16 %
+3.2. 不同动作评估
+如第2.3.1节所述，我们纳入了16名受试者——其中8名健康个体和8名伪受试者——用于分析。与第3.1节描述类似，我们采用了8折交叉验证来评估不同动作的表现。每个折叠中选出一名健康个体和一名伪受试者。这些被选中的受试者仅出现在测试数据中，并被排除在该轮计算的训练数据之外。这些受试者的结果被表示为“未见”，用于评估模型在不同受试者间的泛化能力。其余受试者被纳入训练和测试数据集。具体来说，每个动作的第一和第二次试验用于训练，第三次用于测试。这些受试者的结果被表示为“被看到”，并用于评估模型在不同运动中的泛化能力。表8总结了结果。
+表8。拟议的GaitSeg Net中不同动作的准确性。（Dg：拖拽步态;CG：环绕步态;单数：小步步态）。
+
+运动	已见	未见
+托	跟随	全脚	托	跟随	全脚
+自由式	89.7 %	91.0 %	94.5 %	84.9 %	84.8 %	89.7 %
+跳	90.2 %	935 %	97.8 %	88.9 %	88.5 %	96.7 %
+ROM	88.7 %	94.0 %	98.2 %	85.2 %	87.8 %	96.9 %
+跑步	94.7 %	95.6 %	96.6 %	93.7 %	94.7 %	96.5 %
+坡度	94.4 %	95.1 %	98.2 %	93.1 %	93.0 %	97.9 %
+徒步	96.8 %	97.0 %	98.7 %	95.0 %	95.4 %	98.5 %
+楼梯	96.0 %	96.4 %	98.6 %	95.4 %	95.0 %	98.4 %
+DG	91.6 %	95.5 %	97.4 %	88.9 %	94.1 %	96.6 %
+CG	93.5 %	96.2 %	98.0 %	91.1 %	94.9 %	97.6 %
+SG	91.5 %	93.5 %	96.5 %	88.9 %	90.2 %	96.1 %
+如表8所示，在未见条件下的自由式动作最具挑战性，因为训练集中既未出现主体，也未出现动作。尽管如此，脚趾、脚跟和全足状态的准确率分别保持在84.9%、84.8%和89.7%。
+在各种动作中，脚趾和脚跟的准确度在从可见对象切换到未被摄像对象时明显比整只脚下降得更明显。这表明脚趾和脚跟状态的结果推广效果更差。这种差异主要归因于个体在步行风格上的独特性和偏好，这使得在不同受试者之间推广脚趾和脚跟状态变化变得困难。在某些带有明显动作的步态阶段（如跑步、行走、楼梯和坡度），脚趾和脚跟的预测准确度非常接近。在不涉及表观动作的步态阶段（如Dg、Cg和ROM），脚趾和脚跟的预测准确度变异性更大。
+表9总结了所有动议的MDE。本研究采样率为100赫兹，每个时间框架对应10毫秒。如表所示，步行的MDE最低（全足状态的受试者为1.46）。ROM表现出最高的误差，因为该动作涉及缓慢且静止的运动，导致相位变化最小。对于这三种异常步态，误差比正常行走更明显。与准确度结果类似，脚趾和脚跟的误差也大于全足状态的误差。
+表9。在拟议的GaitSeg Net中不同动作的时间误差。（Dg：拖拽步态，Cg：环绕步态，单音：小步步态）
+
+运动	已见	未见
+托	跟随	全脚	托	跟随	全脚
+自由式	7.90	14.77	4.28	13.52	28.08	10.19
+跳	16.68	11.04	4.95	19.08	13.54	5.09
+ROM	27.9	19.51	10.24	31.01	26.79	13.87
+跑步	2.70	2.56	1.85	3.00	3.03	1.92
+坡度	5.72	4.80	1.87	6.78	5.71	2.02
+徒步	3.39	3.01	1.44	4.35	4.50	1.53
+楼梯	5.20	5.82	2.67	5.57	7.37	3.07
+DG	10.58	7.28	4.92	12.16	8.37	5.84
+CG	10.24	6.24	3.60	12.16	7.8	4.53
+SG	6.35	6.39	2.99	8.13	6.84	3.49
+3.3. 输入信号的消融研究
+在该方法中，我们将IMU的四元数（Qua）（使用磁力计和EKF滤波器计算）添加到模型输入中。然而，磁力计数据可能并不总是可靠，因为仪器极易受到外部干扰。具体来说，医院 大型作设备（如磁共振成像仪）附近的磁场可能使数据完全无法使用。在这种情况下，只能使用加速和陀螺数据进行估算。此外，为了考察不同信号模态对模型预测结果的影响，我们比较了使用多种输入信号的准确率（见表10）。结果表明，加速表优于陀螺仪，因为它捕捉了状态转变过程中更为明显的变化。当加入额外信号时，性能会进一步提升。
+表10。不同输入信号的准确性。（Acc：加速度，Gyro：角速度，Qua：四元数）。
+
+运动	准确性
+托	跟随	全脚
+计取 + 陀螺 + 夸	95.77 %	93.90 %	97.56 %
+加速+陀螺	95.77 %	93.86 %	97.56 %
+ACC	95.61 %	93.64 %	97.45 %
+陀螺仪	95.25 %	93.01 %	97.09 %
+3.4. 运动多样性的消融研究
+我们对多种训练数据进行了消融实验。如表11所示，我们聚焦于三种异常步态，首先计算了单一步态条件下可见和未被观察对象（包括脚趾、脚跟和全足）的准确度之和，同时考虑了训练和测试数据。随后，我们将各种动作——包括自由式、步行、跑步、跳跃、活动范围、坡度和楼梯——添加到训练数据中，并计算准确度，同时保持测试数据恒定。我们的结果表明，无论异常步态类型如何，使用多样化的训练数据集相比仅使用原始训练数据而无额外动作，都能获得更好的表现。对于“已观察对象”，Sg、Dg和Cg的准确率提升分别为0.10%、0.33%和0.26%。对于“未被关注对象”，Sg、Dg和Cg分别提升了0.30%、0.45%和0.30%。这些发现表明，包含多种动作与模型学习异常步态特征的能力之间存在强烈相关性。
+表11。评估不同动作时准确度会变化。
+
+训练数据	测试数据	准确性
+已见	未见
+SG	SG	93.30 %	90.10 %
+DG	DG	94.12 %	91.53 %
+CG	CG	95.12 %	93.20 %
+Sg + 全部	SG	93.40 %	90.40 %
+Dg + All	DG	94.45 %	91.98 %
+CG + 全部	CG	95.38 %	93.50 %
+3.5. 模型结构的消融研究
+在提出的GaitSeg Net模型中，我们将通用变换器中前馈分量的线性层替换为Conv1D层。通过实验验证了该方法的有效性，确认输出向量尺寸相同。如表12总结，Conv1D层表现优于标准线性层。这是因为Conv1D图层在处理顺序数据时往往表现出更好的泛化能力，因为它们能有效捕捉输入数据中的局部模式。步态分割中特定时刻的状态仅与该时刻前后短时间窗口内输入信号的变化相关，卷积模型可以满足这一要求。相比之下，线性图层更难聚焦于这些局部信息。
+表12。模型结构的消融研究。
+
+空牢房	准确性	F1 积分
+托	跟随	全脚	托	跟随	全脚
+线性	95.65 %	93.77 %	97.54 %	94.13 %	95.27 %	98.13 %
+Conv1D	95.73 %	93.77 %	97.57 %	94.16 %	95.29 %	98.16 %
+3.6. 宽核CNN的消融研究
+我们使用了一个简单的三层CNN，如图12（左）所示，来验证宽核CNN的有效性。
+图12
+下载：下载高分辨率图像（243KB）
+下载：下载全尺寸图片
+图12。模型结构（左）和结果（右）。
+
+结果如图12（右图）所示。随着核粒大小的增大，每个部分的预测准确率都会提高。对于1、3和5这样的小核粒，准确率有限，但当核粒大小增加到17和19时，准确率会趋于稳定。这表明使用宽核尺寸有助于减少计算数据中的噪声效应，并提升模型的鲁棒性。
+4. 讨论
+第4.1节讨论了本研究的创新性，随后在第4.2节对分割方法进行了解释。在第4.3节，我们将结果与以往研究进行比较。应用和局限性分别在第4.4节应用和4.5节限制中讨论。
+4.1. 新奇
+本研究的新颖之处在于将步态分段从正常步态扩展到异常。我们提出了基于基本步态模式原则的广义分段框架。构建了一个涵盖多种步态模式的综合数据集，并开发了GaitSeg Net模型，以学习这些步态的基本特征，实现高精度且稳健的预测。以往的研究主要聚焦于正常步态或特定的步态障碍——如帕金森病（Prateek 等，2020;Romijnders等，2021）或偏瘫患者（Parisi等，2016;Lou 等，2019）。相比之下，本研究将正常和异常步态模式整合为统一框架。如表13所示。
+表13。不同步态模式中不同方法采用情况的比较。
+
+方法介绍	徒步	跑步	拖拽步态	环球步态	小步态
+金与李（2017）	✔	×	×	×	×
+堀等人（2019）	✔	×	×	×	×
+Prateek 等，2020	✔	×	×	×	×
+Lou等（2019）	×	×	×	×	✔
+堀等人（2019）	✔	✔	×	✔	×
+Sui 等人（2020）	✔	✔	×	×	×
+Romijnders 等（2021）	×	×	×	×	✔
+Bikias 等（2021）	×	×	×	×	✔
+我们的	✔	✔	✔	✔	✔
+随后评估是否实现了异常步态分段的扩展。Sui 等（2020）将步态分为站姿阶段和摆动阶段（两类分类），分别用于步行和跑步，这一分类层次低于本研究。他们报告的总准确率为96.88%，而本研究中步行和跑步的平均准确率为97.5%，步行为98.5%，跑步为96.5%。该模型在正常步态分段中的优异表现展示了其高度的鲁棒性，支持建立通用步态分段。通过复制他们的模型并在我们的数据集上测试，进一步验证了Gaitseg Net的优越性（见表6）。此外，所提出的GaitSeg Net模型在异常步态分段方面取得了很高的准确率（小步步态：96.1%;拖曳步态：96.6%;环绕步态：97.6%）。对于拖曳步态，即脚始终与地面保持接触（见图11），所提方法有效地区分了每一步的分段。这些结果证实了对异常步态分段的扩展成功实施。
+4.2. 分割定义
+本节讨论了所提移动-停止分割方法背后的合理性。以往研究中为正常步态设计的传统阶段分法假设站立阶段脚不会在地面滑动。然而，拖步时脚在行走时仍保持地面接触时，这种条件并不满足。因此，使用传统方法逐步分割变得具有挑战性。所提的移动和停止分段方法不受此条件限制。对于正常步态，移动-停止分叉的效果与以往研究结果一致：脚趾和脚跟同时移动对应摆动阶段，脚尖或脚跟的停顿对应于初始接触，同时停顿脚趾和脚跟对应完全接触。此外，帕金森病患者的FoG表现为左右脚趾和脚跟运动状态的变化。与以往研究报告的步态分类相比，移动-停止现象更有效地与异常步态模式相符。
+4.3. 比较
+我们观察到两项先前研究中报告的方法与所提方法有相似之处。Han等人（2019）假设并评估了三种基于正常行走模式的异常步态，脚趾和脚跟着地序列较为频繁。然而，实际的异常步态比单纯改变脚部接触顺序更为复杂。例如，在拖拽步态中，脚始终与地面保持接触，而在偏瘫步态中，脚在摆动阶段会在空中画圈。这些复杂性使得用他们的方法分析此类步态变得困难。Romijnders等（2022）从病理学角度分析了步态分段，将参与者分为不同组别（年轻成人、老年人及帕金森病、多发性硬化症和慢性腰痛患者）。他们的研究揭示了步态与疾病之间的关系。在我们的研究中，步态根据其特征（Sg、Cg和Dg）进行了分段，目的是确定行走模式如何影响结果。例如，老年人的步态在步幅缩短、频率较短以及双脚支撑时间较长方面与轻度帕金森病患者高度相似。因此，在我们的分析中，这些模式本质上是相同的。
+此外，我们将分析结果与其他传感器研究进行了比较。光学动作捕捉系统（Balazia 和 Sojka，2018）报告了最高的准确率。在这种方法中，多台摄像头追踪附着在受试者身体上的标记，以精确计算其空间位置。虽然这有助于准确捕捉下肢活动，但该系统成本高昂，使用前需进行一系列校准，且用户的运动空间极为有限。力板也被用于步态相关研究（Jun 等，2021;Pandey 等，2022;Refai 等，2018）通过测量脚在地面施加的力。这些方法能够精确且直接地测量步态事件，如脚跟着地和脚趾着地，使其在分段任务中具有高度准确性。这些方法在实验室等受控环境中尤其有效，因为数据质量稳定。然而，由于其固定性和高昂的成本，限制了其在日常生活或大规模研究中的适用性。用于步态分段的足部压力传感器（Crea等，2012;De Rossi等，2012）相比光学动作捕捉系统，价格相对较低，且不限制用户的运动空间。然而，有限的存储和功率不利于长时间测量。此外，压力单元必须根据不同脚尺寸的受试者重新定位。另外，我们实验中使用的IMU传感器比上述两种测量设备成本明显低廉。此外，IMU传感器的可穿戴性、便携性和可用性使其在应用上更具优势。
+4.4. 应用
+广义分段，包括正常和异常步态，具有多种应用。首先，医学领域的医生可以通过评估患者的步态阶段来评估潜在疾病或康复效果，而无需根据患者的步态选择不同的评估方法。其次，可以扩展一些现有研究。例如，Hori等人（2019）逐步分割步态，并通过求得加速度的双重积分来估算了枪柄轨迹。然而，由于分段失败，他们无法估算拖拽步态或偏瘫步态。他们的方法可以与拟议方法整合，并推广到步态异常的患者。另外，基于IMU的三维姿态估计任务（Yi等，2021,2022）可以提供多种行走脚步运动（移动或停止），以实现更准确的全局位置跟踪。基于受试者的步态信息，可以为可穿戴设备实现更智能、更可控的算法。
+The advantage of this study is that we use only IMU sensors as input signals, which are low cost, portable, have no limitations in motion space, and are convenient to implement in the real world compared to conventional motion capture systems or ground reaction plates. However, the proposed method has several disadvantages. When the magnetometer is heavy influenced (e.g., when close to an MRI machine in a hospital), the quaternion of the IMU cannot be correctly calculated, and only acc and gyro data can be used. As a result, accuracy decreases, as shown in Table 7. Another limitation is that the IMU connects to the PC via Bluetooth, which can occasionally cause data transmission delays that affect real-time performance.
+4.5. Limitations
+First, we used pseudo-subjects to simulate abnormal gait patterns instead of actual patient data. While this approach allowed for controlled experiments and the generation of diverse abnormal gait scenarios, it may not fully capture the variability and complexity of real-world gait data. For example, real patients often exhibit subtle or mixed gait abnormalities that are difficult to simulate accurately. To address this limitation, future work will focus on collecting and analyzing data from real patients to validate the model under clinically relevant conditions.
+Second, our analysis was limited to three representative abnormal gait types: small-stepped, dragging, and circumduction gaits. These were selected based on their prevalence in clinical observations and their distinct features, which can be detected by our model. However, other abnormal gait patterns, such as antalgic, spastic, or ataxic gaits, were not considered. Expanding the study to include a broader range of gait abnormalities would enhance the model's applicability and robustness.
+5. Conclusion
+In this study, we developed and validated an IMU-based gait segmentation method that effectively handles both normal and abnormal gaits. We proposed a new segmentation definition that treats both gait types equally and introduced GaitSeg Net, a deep learning model that integrates CNN, LSTM, and Transformer for robust feature extraction. The model employs wide-kernel CNNs to mitigate noise and optimizes receptive field constraints to enhance segmentation performance. Experimental results demonstrate that GaitSeg Net outperforms previous methods and maintains high segmentation accuracy across various gait types, including three representative abnormal gait patterns (small-stepped, dragging, and circumduction gaits). These findings confirm that our method generalizes well to both normal and pathological gait patterns, making a significant contribution to gait segmentation research.
+Although actual patient data were not used in this study and only three representative abnormal gait types were considered, we plan to gather more data in clinical settings to further support the findings of this study.
+We recommend two directions for future investigation. First, as mentioned in Section 3.4, there is a correlation between the various actions and features of abnormal gait patterns that can be learned by the model. Exploring this correlation would be valuable. Second, we plan to use IMU sensors to estimate foot pressure distributions. IMU sensors are sensitive to changes in the gait phase, such as unexpected variations in acc and gyro data when the plantar surface contacts the ground. Therefore, a strong correlation exists between changes in IMU's acc data and variations in foot pressure when a person moves faster or slower. This aspect requires further analysis.
+CRediT authorship contribution statement
+Changyu Zhao: Writing – original draft, Visualization, Software, Methodology, Conceptualization. Yuanjian Jin: Writing – review & editing, Methodology, Formal analysis. Ruoding An: Writing – original draft, Validation. Hirotaka Uchitomi: Writing – review & editing, Methodology, Investigation, Conceptualization. Yoshihiro Miyake: Writing – review & editing, Supervision, Investigation, Conceptualization.
+Ethical statement
+The authors declare that all procedures performed in studies involving human participants were in accordance with the ethical standards of the institutional and/or national research committee.
+Declaration of competing interest
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+Acknowledgments
+This work was supported in part by the Japan Society for the Promotion of Science (JSPS) KAKENHI Grant Number 22K17630, the Japan Science and Technology Agency (JST) CREST Grant Number JPMJCR21C5, the JST COI-NEXT Grant Number JPMJPF2101, the JST Mirai Program Grant Number JPMJMI24H2, and the JST SPRING, Japan Grant Number JPMJSP2106.
+Appendix A. Supplementary data
+
+Download all supplementary files included with this article
+What’s this?
+The following are the Supplementary data to this article:
+Download: Download Word document (738KB)
+Multimedia component 1.
+
+Media player
+
+PlayRestartRewindForward
+Volume
+SlowerFasterPreferencesEnter full screen
+0:00 / 1:51Speed: 1xPaused
+Download: Download video (38MB)
+Multimedia component 2.
+
+Media player
+
+PlayRestartRewindForward
+Volume
+SlowerFasterPreferencesEnter full screen
+0:00 / 2:07Speed: 1xPaused
+Download: Download video (41MB)
+Multimedia component 3.
+
+Data availability
+The authors do not have permission to share data.
+References
+Abinaya et al., 2012
+B. Abinaya, V. Latha, M. Suchetha
+An advanced gait monitoring system based on an air pressure sensor embedded in a shoe
+Procedia Eng., 38 (2012), pp. 1634-1643, 10.1016/j.proeng.2012.06.199
+View PDF
+View articleView in ScopusGoogle Scholar
+Agostini et al., 2013
+V. Agostini, G. Balestra, M. Knaflitz
+Segmentation and classification of gait cycles
+IEEE Trans. Neural Syst. Rehabil. Eng., 22 (2013), pp. 946-952, 10.1109/TNSRE.2013.2291907
+Google Scholar
+Aloisio et al., 2024
+A. Aloisio, D.P. Pasca, D. Owolabi, C. Loss
+Vibration serviceability of hybrid CLT-steel composite floors based on experimental and numerical investigations using random walk models
+Eng. Struct., 304 (2024), Article 117600
+View PDF
+View articleView in ScopusGoogle Scholar
+Balazia and Sojka, 2018
+M. Balazia, P. Sojka
+Gait recognition from motion capture data
+ACM Trans. Multimed Comput. Commun. Appl, 14 (2018), pp. 1-18, 10.1145/3152124
+Google Scholar
+Bauman and Brandon, 2022
+V.V. Bauman, S.C.E. Brandon
+Gait phase detection in walking and stairs using machine learning
+J. Biomech. Eng., 144 (2022), Article 121007, 10.1115/1.4055504
+View in ScopusGoogle Scholar
+Bikias et al., 2021
+T. Bikias, D. Iakovakis, S. Hadjidimitriou, V. Charisis, L.J. Hadjileontiadis
+DeepFoG: an IMU-based detection of freezing of gait episodes in Parkinson's disease patients via deep learning
+Front. Robot. AI., 8 (2021), Article 537384, 10.3389/frobt.2021.537384
+View in ScopusGoogle Scholar
+Chaparro-Cárdenas et al., 2018
+S.L. Chaparro-Cárdenas, A.A. Lozano-Guzmán, J.A. Ramirez-Bautista, A. Hernández-Zavala
+A review in gait rehabilitation devices and applied control techniques
+Disabil. Rehabil. Assist. Technol., 13 (2018), pp. 819-834, 10.1080/17483107.2018.1447611
+View in ScopusGoogle Scholar
+Chen et al., 2021
+C. Chen, Z. Du, L. He, Y. Shi, J. Wang, W. Dong
+A novel gait pattern recognition method based on LSTM-CNN for lower limb exoskeleton
+J. Bionic Eng., 18 (2021), pp. 1059-1072, 10.1007/s42235-021-00083-y
+View in ScopusGoogle Scholar
+Cicirelli et al., 2022
+G. Cicirelli, D. Impedovo, V. Dentamaro, R. Marani, G. Pirlo, T.R. D'Orazio
+Human gait analysis in neurodegenerative diseases: a review
+IEEE J. Biomed. Health Inform., 26 (2022), pp. 229-242, 10.1109/JBHI.2021.3092875
+View in ScopusGoogle Scholar
+Ciresan et al., 2011
+D.C. Ciresan, U. Meier, J. Masci, L.M. Gambardella
+Flexible, High Performance Convolutional Neural Networks for Image classification//Twenty-Second International Joint Conference on Artificial Intelligence
+(2011)
+Google Scholar
+Crea et al., 2012
+S. Crea, S.M.M. De Rossi, M. Donati, P. Rebersek, D. Novak, N. Vitiello, T. Lenzi, J. Podobnik, M. Munih, M.C. Carrozza
+Development of gait segmentation methods for wearable foot pressure sensors
+Annual International Conference of the IEEE Engineering in Medicine and Biology Society, 2012, IEEE Publications (2012), pp. 5018-5021
+CrossrefView in ScopusGoogle Scholar
+De Rossi et al., 2012
+S.M.M. De Rossi, S. Crea, M. Donati, P. Rebersek, D. Novak, N. Vitiello, T. Lenzi, J. Podobnik, M. Munih, M.C. Carrozza
+Gait segmentation using bipedal foot pressure patterns 4th
+IEEE RAS & EMBS International Conference on Biomedical Robotics and Biomechatronics (BioRob), 2012, IEEE Publications (2012), pp. 361-366
+View in ScopusGoogle Scholar
+Delgado-Escano et al., 2018
+R. Delgado-Escano, F.M. Castro, J.R. Cózar, M.J. Marin-Jimenez, N. Guil
+An end-to-end multi-task and fusion CNN for inertial-based gait recognition
+IEEE Access, 7 (2018), pp. 1897-1908, 10.1109/ACCESS.2018.2886899
+Google Scholar
+Gao et al., 2019
+J. Gao, P. Gu, Q. Ren, et al.
+Abnormal gait recognition algorithm based on LSTM-CNN fusion network
+IEEE Access, 7 (2019), pp. 163180-163190
+CrossrefView in ScopusGoogle Scholar
+Gujarathi and Bhole, 2019
+T. Gujarathi, K. Bhole
+Gait Analysis Using Imu Sensor 10th International Conference on Computing, Communication and Networking Technologies (ICCCNT), 2019
+IEEE Publications (2019), pp. 1-5, 10.1109/ICCCNT45670.2019.8944545
+Google Scholar
+Han et al., 2019
+Y.C. Han, K.I. Wong, I. Murray
+Gait phase detection for normal and abnormal gaits using IMU
+IEEE Sens. J., 19 (2019), pp. 3439-3448, 10.1109/JSEN.2019.2894143
+View in ScopusGoogle Scholar
+Harris et al., 2022
+Elsa J. Harris, I-Hung Khoo, Emel Demircan
+A survey of human gait-based artificial intelligence applications
+Front. Robot. AI, 8 (2022), Article 749274
+Google Scholar
+Hori et al., 2019
+Koyu Hori, Y. Mao, Y. Ono, H. Ora, Y. Hirobe, H. Sawada, A. Inaba, S. Orimo, Y. Miyake
+Inertial measurement unit-based estimation of foot trajectory for clinical gait analysis
+Front. Physiol., 10 (2019), p. 1530, 10.3389/fphys.2019.01530
+Google Scholar
+Hossain et al., 2023
+M.S.B. Hossain, Z. Guo, H. Choi
+Estimation of lower extremity joint moments and 3D ground reaction forces using IMU sensors in multiple walking conditions: a deep learning approach
+IEEE J. Biomed. Health Inform., 27 (2023), pp. 2829-2840, 10.1109/JBHI.2023.3262164
+View in ScopusGoogle Scholar
+Huang et al., 2021
+H. Huang, P. Zhou, Y. Li, F. Sun
+A lightweight attention-based CNN model for efficient gait recognition with wearable IMU sensors
+Sensors, 21 (2021), p. 2866, 10.3390/s21082866
+View in ScopusGoogle Scholar
+Huo et al., 2014
+W. Huo, S. Mohammed, J.C. Moreno, Y. Amirat
+Lower limb wearable robots for assistance and rehabilitation: a state of the art
+IEEE Syst. J., 10 (2014), pp. 1068-1081, 10.1109/JSYST.2014.2351491
+Google Scholar
+Ji and Pachi, 2005
+T. Ji, A. Pachi
+Frequency and velocity of people walking
+Struct. Eng., 84 (3) (2005), pp. 36-40
+CrossrefGoogle Scholar
+Jun et al., 2021
+Kooksung Jun, et al.
+Deep learning-based multimodal abnormal gait classification using a 3D skeleton and plantar foot pressure
+IEEE Access, 9 (2021), pp. 161576-161589
+CrossrefView in ScopusGoogle Scholar
+Kim and Lee, 2017
+M. Kim, D. Lee
+Development of an IMU-based foot-ground contact detection (FGCD) algorithm
+Ergonomics, 60 (2017), pp. 384-403, 10.1080/00140139.2016.1174314
+View in ScopusGoogle Scholar
+Kong and Tomizuka, 2009
+K. Kong, M. Tomizuka
+A gait monitoring system based on air pressure sensors embedded in a shoe
+IEEE/ASME Trans. Mechatron., 14 (3) (2009), pp. 358-370
+View in ScopusGoogle Scholar
+Leddy et al., 2011
+A.L. Leddy, B.E. Crowner, G.M. Earhart
+Functional gait assessment and balance evaluation system test: reliability, validity, sensitivity, and specificity for identifying individuals with Parkinson disease who fall
+Phys. Ther., 91 (2011), pp. 102-113, 10.2522/ptj.20100113
+View in ScopusGoogle Scholar
+Liu et al., 2009
+T. Liu, Y. Inoue, K. Shibata
+Development of a wearable sensor system for quantitative gait analysis
+Measurement, 42 (2009), pp. 978-988, 10.1016/j.measurement.2009.02.002
+View PDF
+View articleView in ScopusGoogle Scholar
+Liu et al., 2010
+T. Liu, et al.
+A mobile force plate system and its application to quantitative evaluation of normal and pathological gait
+2010 IEEE/ASME International Conference on Advanced Intelligent Mechatronics, IEEE (2010)
+Google Scholar
+Lou et al., 2019
+Y. Lou, R. Wang, J. Mai, N. Wang, Q. Wang
+IMU-based gait phase recognition for stroke survivors
+Robotica, 37 (2019), pp. 2195-2208, 10.1017/S0263574719000328
+View in ScopusGoogle Scholar
+Mao et al., 2021
+Y. Mao, T. Ogata, H. Ora, N. Tanaka, Y. Miyake
+Estimation of stride-by-stride spatial gait parameters using inertial measurement unit attached to the shank with inverted pendulum model
+Sci. Rep., 11 (2021), p. 1391, 10.1038/s41598-021-81009-w
+View in ScopusGoogle Scholar
+Mihradi et al., 2011
+S. Mihradi, T. Dirgantara, A.I. Mahyuddin
+Development of an Optical Motion-Capture System for 3D Gait Analysis 2nd International Conference on Instrumentation, Communications, Information Technology, and Biomedical Engineering, 2011
+IEEE Publications (2011), pp. 391-394
+CrossrefView in ScopusGoogle Scholar
+Morris et al., 2016
+R. Morris, S. Lord, J. Bunce, D. Burn, L. Rochester
+Gait and cognition: mapping the global and discrete relationships in aging and neurodegenerative disease
+Neurosci. Biobehav. Rev., 64 (2016), pp. 326-345, 10.1016/j.neubiorev.2016.02.012
+View PDF
+View articleView in ScopusGoogle Scholar
+Parisi et al., 2016
+F. Parisi, G. Ferrari, A. Baricich, M. D'Innocenzo, C. Cisari, A. Mauro
+Accurate Gait Analysis in Post-stroke Patients Using a Single Inertial Measurement Unit 13th International Conference on Wearable and Implantable Body Sensor Networks (BSN)
+IEEE Publications. IEEE Publications (2016), pp. 335-340
+2016
+CrossrefView in ScopusGoogle Scholar
+Pandey et al., 2022
+C. Pandey, et al.
+GaitRec‐net: a deep neural network for gait disorder detection using ground reaction force
+PPAR Res., 1 (2022), Article 9355015
+2022
+View in ScopusGoogle Scholar
+Prateek et al., 2020
+G.V. Prateek, P. Mazzoni, G.M. Earhart, A. Nehorai
+Gait cycle validation and segmentation using inertial sensors
+IEEE Trans. Bio Med. Eng., 67 (2020), pp. 2132-2144, 10.1109/TBME.2019.2955423
+View in ScopusGoogle Scholar
+Refai et al., 2018
+M.I.M. Refai, B.J.F. van Beijnum, J.H. Buurke, P.H. Veltnik
+Gait and dynamic balance sensing using wearable foot sensors
+IEEE Trans. Neural Syst. Rehabil. Eng., 27 (2018), pp. 218-227
+Google Scholar
+Romijnders et al., 2022
+R. Romijnders, E. Warmerdam, C. Hansen, G. Schmidt, W. Maetzler
+A deep learning approach for gait event detection from a single shank-worn imu: validation in healthy and neurological cohorts
+Sensors, 22 (2022), p. 3859, 10.3390/s22103859
+View in ScopusGoogle Scholar
+Romijnders et al., 2021
+R. Romijnders, E. Warmerdam, C. Hansen, J. Welzel, G. Schmidt, W. Maetzler
+Validation of IMU-based gait event detection during curved walking and turning in older adults and Parkinson's disease patients
+J. NeuroEng. Rehabil., 18 (2021), p. 28, 10.1186/s12984-021-00828-0
+View in ScopusGoogle Scholar
+Sabatelli et al., 2013
+S. Sabatelli, M. Galgani, L. Fanucci, A. Rocchi
+A double-stage Kalman filter for orientation tracking with an integrated processor in 9-D IMU
+IEEE Trans. Instrum. Meas., 62 (2013), pp. 590-598, 10.1109/TIM.2012.2218692
+View in ScopusGoogle Scholar
+Seel et al., 2014
+T. Seel, J. Raisch, T. Schauer
+IMU-based joint angle measurement for gait analysis
+Sensors (Basel), 14 (2014), pp. 6891-6909, 10.3390/s140406891
+View in ScopusGoogle Scholar
+Sofuwa et al., 2005
+O. Sofuwa, A. Nieuwboer, K. Desloovere, A.M. Willems, F. Chavret, I. Jonkers
+Quantitative gait analysis in Parkinson's disease: comparison with a healthy control group
+Arch. Phys. Med. Rehabil., 86 (2005), pp. 1007-1013, 10.1016/j.apmr.2004.08.012
+View PDF
+View articleView in ScopusGoogle Scholar
+Stamatakis et al., 2011
+J. Stamatakis, J. Crémers, D. Maquet, B. Macq, G. Garraux
+Gait feature extraction in Parkinson's disease using low-cost accelerometers
+Soc. Annual International Conference of the, Annu. Int. Conf. IEEE Eng. Med. Biol, Boston, MA, USA (2011), pp. 7900-7903, 10.1109/IEMBS.2011.6091948
+IEEE Engineering in Medicine and Biology Society 2011
+View in ScopusGoogle Scholar
+Sarshar et al., 2021
+M. Sarshar, S. Polturi, L. Schega
+Gait phase estimation by using LSTM in IMU-based gait analysis—proof of concept
+Sensors, 21 (17) (2021), p. 5749
+CrossrefView in ScopusGoogle Scholar
+Shah et al., 2022
+Vaibhav Shah, et al.
+Generalizability of deep learning models for predicting outdoor irregular walking surfaces
+J. Biomech., 139 (2022), Article 111159
+View PDF
+View articleView in ScopusGoogle Scholar
+Su and Smith, 2020
+B. Su, C. Smith
+Gutierrez Farewik E. Gait phase recognition using deep convolutional neural network with inertial measurement units
+Biosensors, 10 (2020), p. 109
+Google Scholar
+Sui et al., 2020
+J.D. Sui, W.H. Chen, T.Y. Shiang, T. Chang
+Real-time wearable gait phase segmentation for running and walking
+IEEE International Symposium on Circuits and Systems (ISCAS), 2020, IEEE Publications (2020), pp. 1-5, 10.1109/ISCAS45731.2020.9181210
+Google Scholar
+Sutherland, 2005
+D.H. Sutherland
+The evolution of clinical gait analysis part III–kinetics and energy assessment
+Gait Posture, 21 (4) (2005), pp. 447-461
+View PDF
+View articleView in ScopusGoogle Scholar
+Tedaldi et al., 2014
+D. Tedaldi, A. Pretto, E. Menegatti
+A robust and easy to implement method for IMU calibration without external equipments
+IEEE Int. Conf. Robot. Automation (ICRA) (2014), pp. 3042-3049, 10.1109/ICRA.2014.6907297
+2014
+View in ScopusGoogle Scholar
+Tao et al., 2023
+S. Tao, W.L. Goh, Y. Gao
+A convolved self-attention model for imu-based gait detection and human activity recognition
+2023 IEEE 5th International Conference on Artificial Intelligence Circuits and Systems (AICAS), IEEE (2023)
+Google Scholar
+Vaswani et al., 2017
+A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A.N. Gomez, L. Kaiser, I. Polosukhin
+Attention is all you need
+Adv. Neural Inf. Process. Syst., 30 (2017)
+Google Scholar
+Wang et al., 2021
+L. Wang, et al.
+Gait recognition using optical motion capture: a decision fusion based method
+Sensors, 21 (10) (2021), p. 3496
+CrossrefView in ScopusGoogle Scholar
+Woolley, 2001
+S.M. Woolley
+Characteristics of gait in hemiplegia
+Top. Stroke Rehabil., 7 (2001), pp. 1-18, 10.1310/JB16-V04F-JAL5-H1UV
+View in ScopusGoogle Scholar
+Yi et al., 2021
+X. Yi, Y. Zhou, F. Xu
+Transpose: real-time 3D human translation and pose estimation with six inertial sensors
+ACM Trans. Graph., 40 (2021), pp. 1-13, 10.1145/3450626.3459786
+Google Scholar
+Yi et al., 2022
+X. Yi, Y. Zhou, M. Habermann, S. Shimada, V. Golyanik, C. Theobalt, F. Xu
+Physical inertial poser (PIP): physics-aware real-time human motion tracking from sparse inertial sensors
+Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (2022)
+Google Scholar
+Zhang et al., 2017
+K. Zhang, W. Zuo, Y. Chen, D. Meng, L. Zhang
+Beyond a Gaussian denoiser: residual learning of deep CNN for image denoising
+IEEE Trans. Image Process., 26 (2017), pp. 3142-3155, 10.1109/TIP.2017.2662206
+View in ScopusGoogle Scholar
+Cited by (1)
+TensorFlow-based deep neural network framework for predicting peristaltic flow of dissipative Cross fluids in curved porous channels
+2025, Physics of Fluids
+© 2025 The Authors. Published by Elsevier Ltd.
+
+推荐文章
+罕见骨病中全仪器步态分析——文献范围综述
+步态与姿势，第118卷，2025年，第168-177页
+约阿希姆·霍恩，......，乔瓦尼·特里索利诺
+查看PDF
+基于空间步态的异常下肢姿势识别表现为动态阈值检测
+《沙特国王大学计算机与信息科学学报》，第36卷，第8期，2024年，文章102161
+张胜瑞，......张德超
+查看PDF
+步态分析的全面综述：历史、参数、方法、姿态估计及未来工作
+《人工智能医学》，第129卷，2022年，文章102314
+丁普尔·塞西，......，钱德拉·普拉卡什
+
+显示更多3篇文章
+
+文章指标
+引用
+引用索引
+1
+俘获
+门德利读者
+17
+提及
+新闻提及
+1
+PlumX Metrics Logo
+查看详情
+Elsevier logo with wordmark
+About ScienceDirect
+Remote access
+Contact and support
+Terms and conditions
+Privacy policy
+Cookie 设置
+All content on this site: Copyright © 2026 Elsevier B.V., its licensors, and contributors. All rights are reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.
+
+RELX group home page
+反馈
+	2 Files	
+
+爱思唯尔标志
+期刊与书籍
+
+帮助
+搜索
+我的账户
+登录
+
+下载完整期刊
+查看公开手稿
+大纲
+摘要
+关键词
+1. 引言
+2. 稳健三维姿态估计方法
+3. 减少IMU的方法
+4. 实验
+5. 讨论
+6. 结论
+CRediT 作者贡献声明
+利益竞争声明
+致谢
+附录A。补充数据
+数据可用性
+参考文献
+
+展示完整大纲
+引用对象（9）
+数字（11）
+图1。我们提出的框架概述
+图2。Total Capture 数据集中的合成遮挡处理数据（左：下方...
+图3。我们提出的Occ-校正器的结构
+未标注人物
+未标注人物
+图4。左图：关节编号（绿色）和IMU位置（蓝色）演示
+
+再显示5个手办
+表格（9）
+表1
+表2
+表3
+表4
+表5
+表6
+
+显示所有表格
+附加内容（3）
+
+全部下载
+视频S1
+视频第二季
+MMC 第一季
+爱思唯尔
+人工智能的工程应用
+第124卷，2023年9月，106639
+人工智能的工程应用
+降低三维人体姿态估计设备复杂度：利用单目相机和IMU的深度学习方法
+作者链接 打开覆盖面板
+赵长玉
+,
+内富弘隆
+,
+小形太辉
+,
+仙文明
+三宅义弘
+
+显示更多
+
+加入门德利
+
+分享
+
+引用
+https://doi.org/10.1016/j.engappai.2023.106639
+获取版权和内容
+在知识共享许可下
+开放获取
+摘要
+基于相机和惯性测量单元（IMU）的三维（3D）人体姿态估计在过去十年蓬勃发展。然而，由于需要大量设备，现有方法难以应用于临床环境。本研究旨在减少设备数量并保持其稳健性。Occ-Corrector是一种基于语义卷积的神经网络，被提出在单摄像头的闭塞情况下，借助几个IMU进行三维人体姿态的有力估计。它包括一个简单的传感器重塑，有助于更有效地将IMU信息与相机融合，以及交替丢失函数的新策略，使模型能够提高预测具有挑战性姿势的准确性。通过对重量矩阵进行逆分析，研究了每个IMU在器件简化中的重要性。该方法通过使用全捕获数据集和两个假设的遮挡条件进行验证，结果表明只有五个IMU能在不同的遮挡情况下保持准确性稳定。
+上一期文章
+下一期文章
+关键词
+三维人体姿态估计数据融合闭合单眼摄像机惯性测量单元
+1. 引言
+在过去十年中，基于相机的三维（3D）人体姿态估计随着深度学习的发展而蓬勃发展（Andriluka等，2010;Grabner等，2018;Bridgeman等，2019）。除了深度学习与临床应用的交叉开发（Ranjbarzadeh 等，2022;Tian 等，2021），它已在步态分析和老年监测等临床领域发挥作用（Jansen 等，2007;Wu 等，2020;Lonini 等，2022）并且在康复设备控制方面具有潜力。在这些室内环境中应用的一个挑战性问题是由各种障碍物和有限空间引起的堵塞。
+不同的方法会产生不同的效果。分别估计二维（2D）姿态和三维姿态的方法（Chen 和 Ramanan，2017，Bogo 等，2016，Fang 等，2018）主要在二维预测过程中受遮挡影响。同时估计二维和三维姿态的方法（Popa 等，2017，Zhou 等，2017），以充分利用图片获得的信息，是最容易受影响的方法，这类方法在二维预测和三维关节深度预测中都受到影响。使用多台摄像机估计三维人体姿态的方法（Hofmann 和 Gavrila，2012;Qiu 等，2019;Zhang 等，2021）如果无法被足够多的摄像机捕捉到关节，则无法准确估算咬合场景。一些研究者尝试通过数据增强（Sárándi 等，2018a;Sárándi 等，2018b）、时间序列分析（Cheng 等，2020;Wang 等，2020）以及语义恢复（Guo 和 Dai，2018;Zhang 等，2020a）来处理遮挡问题。Zhou 等，2021）。然而，其性能有限，尤其是在严重和长时间闭塞时。
+因此，许多研究者专注于基于惯性测量单元（IMU）的方法，因为IMU不受遮挡影响。在早期阶段，Roetenberg等人（2009）使用了17个IMU来估算人体姿态。尽管估计结果准确，但人体骨骼肌模型需要预先定义，且大量IMU难以佩戴，这对实际使用来说不便。最近，一些研究者尝试使用稀疏IMU来估计姿态（Marcard等，2017;Yi等，2021;Huang等，2018;Yi等，2022）。然而，IMU只能捕获局部信息，而无法捕获全局信息。一个挑战是区分具有相同IMU方向和加速度信号的不同姿态。例如，如果IMU设置在有站立或坐着的人的刀柄上，输出是相同的。此外，IMU还存在漂移问题。
+IMU与摄像头的结合吸引了研究人员的注意，因为IMU捕捉的局部信息不受遮挡影响，摄像头能够提供全局信息。一些研究（Gilbert等，2019;Malleson等，2017;Marcard等，2016;Huang等，2020）显示，充分利用数据集中提供的摄像头和IMU（Trumble等，2017）可以提高准确率。Marcard等人（2018）提出了一种基于优化的方法，整合一台摄像机和十三个IMU来估计视频流中的三维姿态。Zhang等人（2020b）提出了一种融合四台摄像机和八台IMU的新模态融合方法，结果显示该方法能够成功克服自闭现象。然而，这些研究在临床应用中较为困难，因为它们使用了许多设备。大量使用摄像机成本高昂，且运动空间的范围是严格固定的。大量使用IMU对患者佩戴不便，并干扰其运动。
+剩下的问题是如何在减少设备数量时保持闭塞的稳健性。由于缺乏稳健性或过度佩戴影响患者运动的设备，导致三维姿态估计不准确，可能影响某些运动疾病的诊断，或在康复期间未能监测患者的运动状态。我们分两步解决这个问题。首先，我们提出了一种基于深度学习的新框架，以稳健地获得三维姿态，该框架充分利用数据集中仅配备一台相机的IMU。随后，我们提出策略，在加权参数矩阵逆分析中减少IMU数量，同时尽可能保持遮挡的鲁棒性。我们预计将获得模型，仅用一台摄像机和少量IMU来估算遮挡场景下的三维人体姿态。
+
+下载：下载高分辨率图片（335KB）
+下载：下载全尺寸图片
+图1。我们提出的框架概述。被遮挡的图像被捕捉下来。然后基于视觉的姿势估计部分计算出一个不自然的姿势。通过将IMU的信息和处理与Occ-Corrector融合，不自然姿势得以矫正。
+
+为了获得稳健的三维姿态，我们提出了Occ-Corrector，这是一种基于语义图卷积网络（SemGCN）的方法，能够通过IMU信息重建单眼摄像机因遮挡场景获得的非自然姿势。我们设计了一个名为传感器-重塑层的简单层，通过掩罩作防止过度调整，更有效地融合信息，并采用一种新颖的训练策略，交替使用两种损失函数，使模型更容易学习方向信息（详见第2节）。
+为减少IMU数量，我们首先在实验前阶段用数据集中所有可用的IMU训练模型（Trumble等，2017）。然后，我们通过对已开发的Sensor-Reshape层进行逆分析，求出IMU的重要性秩，这在Occ-Corrector中至关重要。基于重要性、等级和对称原则，即末端IMU数量应保持一致，IMU数量被减少（详见第3节）。
+我们综合了两种闭塞场景来评估模型。恒定闭合用于模拟长时间持续隐形的身体部位，如患者经过长椅或站在椅子后面;快速变化闭塞用于模拟患者快速穿过障碍物时闭塞大小和形状的快速变化。结果显示，即使是五个IMU也可能对抗闭塞（详见第4节）。
+论文的主要贡献可总结为：（1）一种基于深度学习的方法，在有限设备条件下，在闭塞情况下稳健估计三维人体姿态，预计应用于临床目的。（2）一个简单的传感器重塑层，通过防止过度调整，促进IMU与相机的数据融合。（3）一种新颖的训练策略，交替使用两种损失函数，使模型学习更多信息。（4）基于人工智能视角的反向分析，分析每个IMU的重要性。
+本文其余部分的组织如下。第二节介绍了估计稳健三维姿态的方法。在第三节中，我们介绍了IMU减少策略。在第四部分，我们介绍验证实验。在第五部分，我们进一步讨论了结果。第六节给出了本研究的结论。
+2. 稳健三维姿态估计方法
+该框架如图1所示。假设一名佩戴几只IMU的人类站在一把长椅后。基于视觉的姿势估计模块获得了不自然姿势，因为人体下肢是隐形的。在预处理IMU的原始数据后，我们将不自然姿势与IMU信息一起输入拟议的Occ-Corrector，修正下肢的估计误差，最终获得高精度姿势。灰色部分可视为数据预处理，该预处理在第2.1节引入。橙色部分是拟议的姿态修正神经网络，该网络在第2.2节中介绍。手稿中使用的所有命名法均在表1中介绍。
+2.1. 数据预处理
+该模块的任务是获取可用于训练拟议网络Occ-Corrector的数据。我们在合成遮挡中创建遮挡图像数据，并在基于视觉的3D姿态估计中获得不自然姿态数据。最后，我们旋转IMU的四元数 ，以表示IMU预处理中每个帧对应的骨骼方向。
+表1。命名法。
+
+空牢房	含义
+相机坐标中的骨四元数
+从IMU坐标传输到地面真实坐标
+在IMU中测量的四元数
+从地面真实坐标传输到摄像机坐标
+层的输出
+层的输入
+,
+SemGCN层中的两个可学习权重矩阵
+恒等矩阵
+相邻矩阵
+元素层次作
+,
+Sensor-Reshape层中的两个可学习权重矩阵
+用于控制每个IMU调整范围的拟议超参数
+关节距离损失
+骨向丧失
+预测接头位置
+真实接头位置
+预测骨骼方向
+表示地面真实的骨头方向
+训练时期的数量
+Occ-Corrector 中的三维姿态输入
+IMU在Occ-Corrector中的输入
+比例缩放超参数
+2.1.1. 合成遮挡
+现有数据集在良好的实验环境中被捕获，且没有物体遮挡。因此，我们通过结合闭塞（Sárándi 等，2018a）来为人体添加一些物体。物体的数量、大小、形状和添加位置都是随机决定的。更详细地说，我们最初在图像中检测到了人类锚点盒。然后，我们从VOC2012数据集中随机取出一些对象（Everingham和Winn，2012），并将其调整为合适的大小。最后，我们把物体加入了带有随机位置的人类锚点盒。部分样本见图2。这一部分对于使模型预测稳健结果至关重要，验证内容可见第4.4.1节。
+2.1.2. 基于视觉的三维姿态估计
+该部件旨在仅凭相机信息估算3D人体姿势。本研究采用Zhou等人（2017）提出的模型，该模型结合二维和三维姿态数据集训练模型，并获得可用于野外的推广结果。然而，由于借用二维图像信息来估算每个节点的深度，它容易出现遮挡现象。当合成遮挡处理的图像输入网络时，得到了不自然的三维姿态，这与地面真实情况有很大不同。该部分在Human3.6M数据集（Ionescu等，2013）上预训练，在训练Occ-Corrector的另一个名为Total Capture的数据集（Trumble等，2017）时权重被固定。
+2.1.3. IMU预处理
+IMU的四元数信息必须经过以下计算，才能送入Occ校正器：
+(1)
+其中
+表示相机坐标中的骨四元数。
+表示IMU中测量的四元数。
+表达IMU向其连接骨骼的转移。
+表示从IMU坐标到地面真实坐标的传输过程。
+表示从地面真实坐标到相机坐标的传输，该坐标由数据集给定的旋转矩阵获得。该作可显著增加我们用于训练的数据量。
+我们使用的数据集（Trumble 等，2017）直接提供了IMU的四元数和校准参数
+以及
+. 在实际情况下，IMU的原始数据包括三轴加速度、陀螺仪和磁力计，并包含系统误差（偏置和比例因子误差）和噪声。为获得纯
+，首先应通过误差消除（Tedaldi 等，2014）处理。然后通过扩展卡尔曼滤波算法（Sabatelli 等，2013）融合加速度、陀螺仪和磁力计。为了获得校准参数，可以轻松获得 T 姿校准方法 
+以及
+该研究由Yi等人（2021年）提出。对于希望在实际应用中构建该系统的人，强烈推荐阅读之前提到的三项IMU预处理研究。
+
+下载：下载高分辨率图片（223KB）
+下载：下载全尺寸图片
+图2。综合遮挡处理数据，包含在Total Capture数据集中（左：下肢）。右侧：上肢）。
+
+2.2. 姿态修正网络
+该模块的任务是借助IMU纠正因视觉方法导致遮挡而产生的不自然姿势。网络结构和数据流在第2.2.1节介绍。随后引入了两个主要层，SemGCN和Sensor-Reshape。最后，交替使用两种损失函数的新策略见第2.2.2节。
+2.2.1. 八角纠正器
+Occ-Corrector 有两个输入：基于先前研究的非自然三维姿态，记为
+以及IMU的四元数，记为
+.这里，联合 = 16，且
+等于IMU的数量。结构如图3所示。非自然的三维姿态首先经过两个语义图卷积块，增加了位置的维度从 
+到
+以确保修改过程在高维空间内进行，从而提升网络的表达能力。IMU的四元数还会经过一层传感器重塑，在合并前将IMU的信息调整为与不自然位置相同的形状，从而避免过度调整。经过四个残差模和一个语义卷积层后，修正后的三维姿态
+得到，表示所有关节的三维位置。每个残差模块由一个SemGCN层、一个批次归一化层和一个整流线性单元（ReLU，由Nair和Hinton提出，2010a;Nair和Hinton，2010b提出）组成，作为激活函数。
+2.2.1.1. SemGCN 层
+语义图卷积层是由Zhao等人（2019年）提出的一种新的图卷积运算层。其公式可以表示如下：
+(2)
+where 
+ and 
+ are two learnable weight matrices. 
+ is an identity matrix. 
+ is an adjacent matrix, which saves the relationship of each node. The former term of the formula represents the operations of each node with itself, and the latter term of the formula means the operations of each node with other associated nodes. The skeleton of the human can be considered as graphic-like data in which some strong relations exist between the joints. Contrary to conventional graph convolution networks (GCN; Yang et al., 2018), the semantic graph convolutional network (SemGCN) has a wide convolution field and fast information transmission efficiency, which allows it to capture local and global information. Therefore, we choose SemGCN as the backbone of our network. In this study, the hidden dimension is set at 128.
+2.2.1.2. Sensor-Reshape layer
+The Sensor-Reshape layer is a new and straightforward calculation layer for fusing IMUs, which aims to allow IMUs to modify the positions of joints in a high-dimensional space and avoid overadjustment. The expression can be written as follows:
+(3)
+where 
+ and 
+ are two learnable weight matrices. They learn how to assign the influence of IMUs to each joint and how to fuse the quaternion with a pose in a high-dimensional space. 
+ has the same shape as 
+, which means that the row represents the number of IMUs and the column represents the number of joints. 
+ denotes the element-wise operation, and it returns 
+ when the value of 
+ is equal to 1; else, it returns 0. This operation prevents the IMUs from adjusting the joint with no relationship. 
+ is a hyperparameter that is required to be pre-defined. The motivation for developing this layer can be found in Supplementary Materials A. In addition, we define a concept called the Dimension of the 
+, which represents the number of adjacent joints that an IMU can modify. We set it to 2 through pre-experiments (details in Supplementary Materials B). The original IMUs input, 
+, became the same dimension (
+) with the pose representation processed in the SemGCN layer after passing the Sensor-Reshape layer, which makes the data fusion easy with only an additive operation. The validity of the Sensor-Reshape layer is verified in Section 4.4.2.
+
+Download: Download high-res image (384KB)
+Download: Download full-size image
+Fig. 3. The structure of our proposed Occ-Corrector.
+
+2.2.2. Alternating loss functions
+We use both the joint distance loss and the bone direction loss. The joint distance loss can be expressed as follows:
+(4)
+where 
+ represents the number of joints, 
+ represents the predicted joint position, and 
+ represents the ground truth joint position. The bone direction loss can be expressed as follows:
+(5)
+where 
+ represents the number of bones, 
+ represents the predicted bone direction, and 
+ represents the ground truth bone direction.
+Previous studies used only joint distance loss (Zhou et al., 2017, Pavlakos et al., 2017, Iskakov et al., 2019) and some added joint distance loss and bone direction loss together (Zhao et al., 2019). Using only joint distance loss makes it difficult for the model to learn the relational information on the direction. However, straightforwardly adding the two loss functions together makes the objective function too complex to optimize. Therefore, unlike the previous study, we use the two loss functions alternately in the training process, as follows:
+(6)
+where 
+ represents the number of training epochs and 
+ represents the weighed hyperparameter set at 0.1 in practice. More intuitively, for the training process, we use joint distance loss for the first, second, third, fifth, sixth, and seventh epochs and bone direction loss for the fourth and eighth epochs, and so on.
+The frequent alternation of the two loss functions can make it difficult for the model to converge, and infrequent alternation can make it difficult for the model to learn directional information. The effectiveness has been verified in Section 4.4.3. The details of the training process are given in Algorithm 1.
+
+Download: Download high-res image (198KB)
+Download: Download full-size image
+3. Method for reducing IMUs
+Reducing the number of IMUs is critical for clinical applications. From a medical perspective, too many IMU sensors worn on the patient can impede the patient’s movement. This can have an impact on some diagnostic approaches that are based on the patient’s motion status. Additionally, the effects of movement can also impede the patient’s rehabilitation. From a technical point of view: numerous wireless IMUs on the market today are based on Bluetooth communication, and too many IMUs can cause delays in data transmission and poor real-time performance. In addition, it is difficult to expand to the direction of multi-person real-time pose estimation. From the perspective of practical use, numerous IMUs will make the wearing process troublesome and inconvenient to use. Therefore, it is necessary to reduce the number of IMUs. The idea is to discard those IMUs that are not important in priority. We describe how to calculate the importance of each IMU in Section 3.1. Additionally, in Section 3.2, we describe the specific discard principles.
+3.1. Importance of IMUs
+It is well known that deep learning resembles a black box. Inspired by other works (Selvaraju et al., 2017, Zhao et al., 2019), we attempt to demonstrate the importance and efficiency of each IMU by focusing on the core of the “black box” weight matrix. It has been lacking in IMU-camera-based research.
+In the beginning, we introduce our understanding of 
+ in Eq. (3). This weight matrix functioned as extending the dimension of IMU data from the number of IMUs to the number of estimated joints, which learns how to distribute information from each IMU to each joint. If the value of 
+ is significantly large, it means that the No. 
+ IMU has a great correction effect on the No. 
+ joints. If the value of a row is large, it indicates that the IMUs substantially modify the corresponding node. If the value of a column is large, it indicates that the corresponding IMU plays a crucial role in joint correction. We define the importance of the No. 
+ IMU as follows:
+(7)
+The importance rank of IMU differs in various movements. For example, in the walking scenario, the IMUs of the limbs modify the pose significantly higher than in other places. However, it is not apparent that the IMUs of the limbs can modify the pose more than other IMUs when performing the action of freestyle. In the importance calculation, this study refers to the weight matrix of models obtained by using all actions as training. Note that if a scenario using 3D pose estimation is specialized (such as the patient’s gait analysis), the importance of the IMU should refer to the weight matrix of the training model under its corresponding conditions. Finally, the details of the calculation process of the Importance of IMUs are given in Algorithm 2.
+
+Download: Download high-res image (181KB)
+Download: Download full-size image
+3.2. Reduction strategies
+The importance of IMU is calculated and used together with the principle of symmetry as the reference for IMU reduction. The number of IMUs in each limb is equal. The human body is a symmetrical model, and although the IMU in the limb may be of varying importance, it should be reduced to ensure that similar positions move together (e.g., upper leg and upper arm together; lower leg with lower leg). Additionally, make sure there is at least one IMU on each limb. A limb without an IMU is too uncertain to recover when completely occluded. Experiment
+4. Experiment
+In Section 4.1, some experimental setup and evaluation methods are introduced. Section 4.2 shows the robustness changes when reducing the number of IMUs. In Section 4.3, we evaluate our approach with different numbers of IMUs in two conditions of clinical simulation, Constant Occlusion and Fast-changing Occlusion. Finally, in Section 4.4, the ablation studies for proposed components are introduced.
+4.1. Experimental setting
+4.1.1. Implementation details
+We used Python 3.8 and version 1.9.1 of Pytorch for the experimental framework. The training hyperparameter can be found in Table 2. The training process was executed on a DELL Precision 5820 desktop with an Nvidia Quadro P2200 GPU, which takes six hours. In total, Occ-Corrector has 0.3M trainable parameters and the memory cost during training is approximately 45 MB. For prediction, our method can run over 110 FPS in CPU-only conditions (details in Supplementary Materials C).
+4.1.2. Dataset
+The Total Capture dataset (Trumble et al., 2017) is a huge dataset that includes information from 13 IMUs and 8 cameras, with a total of 1.9 M frames. It is the most suitable dataset for our research that provide sufficient modality information and includes various poses. Other famous datasets in the 3D human pose estimation field such as Human3.6M (Ionescu et al., 2013) and HumanEva (Sigal et al., 2010). do not have both IMU and camera information.
+The Total Capture dataset was built upon a good experimental environment that only contained self-occlusion and no object-occlusion.
+Table 2. Parameter setting.
+
+Parameter	Value
+Learning rate	0.001 (decreases by half after every 20 epochs)
+Epoch number	60
+Batch size	128
+Optimization function	Adam
+Dimension of 
+2
+0.1
+Thus, we use the synthetic-occlusion approach proposed by Sárándi et al. (2018a) to add some objects to the human body randomly, as introduced in Section 2.1. The dataset involves five different subjects. Each subject contains four actions: ROM, Acting, Walking, and Freestyle. The ROM includes the simplest motion such as slowly reaching and lifting the legs, which allows the model to learn the underlying pose inference. Acting includes the motion that primarily happens in daily life. Walking has only one action, but it is critical for gait-related research, which has the potential role in clinical application. The Freestyle has the most random and unique pose that generally does not appear. It is also the most challenging pose. For data segmentation, we follow the protocol.
+4.1.3. Evaluation standard
+: For the accuracy of the estimated 3D pose. This means that the mean Euclidean distance per joint is calculated after aligning it with the ground truth.
+(8)
+where 
+ means frame. 
+ means the number of joints; for this study, 
+. 
+ means skeleton. 
+ means the position. 
+ means ground truth. The smaller the P-MPJPE, the more accurate is the estimated 3D pose.
+: Increasing ratio of error in occlusion case compared with the normal case. The robustness of occlusion is represented by observing the increased ratio of P-MPJPE in occlusion conditions compared to normal (non-occlusion) conditions. The formulation can be described as follows:
+(9)
+4.2. Evaluation for reduction of IMU
+Following the theory presented in Section 3, after training the model, we extract the parameter matrix of 
+ in Eq. (3), as shown in Fig. 4. It can be observed that the weight on the foot position of the IMUs is relatively low, which means that these two are minimally significant. Next, by referring to Eq. (7), we calculate the score of each IMU, as listed in Table 3. Following the importance rank of IMU in Table 3 and the symmetrical principle, we set the IMUs’ combination in Fig. 5. Fig. 6 shows the results of the qualitative analysis on the relationship between the level of accuracy and the number of IMUs in the occlusion case. As this figure illustrates, object occlusion is more challenging for the vision-based approach, while it did not show an apparent difference for our method. Even if only using five IMUs, the result is close to the ground truth. Table 4 presents the results of the quantitative analysis. After removing three IMUs, R_Foot, L_Foot, and Head, the level of accuracy in the normal case decreased slightly (from 26.4 mm to 28.7 mm), and the robustness in the occlusion case did not change significantly. When using five IMUs, the level of accuracy decreases from 26.4 mm to 39.3 mm. Nonetheless, the tolerance of occlusion remains at 39.3 mm in normal cases and 41.6 mm in occlusion. The condition of not using IMU can be regarded as a baseline to show the performance of robustness (reasonability of baseline can be found in Supplementary Materials F). The accuracy of the three IMUs in occlusion conditions can be found in Supplementary Materials D, which can be considered a clinical application in gait analysis.
+Table 3. The importance of each IMUs.
+
+IMUs	Score	Empty Cell	IMUs	Score
+L_UpArm	1.730		Pelvis	0.772
+R_UpArm	1.441		L_LowArm	0.738
+R_UpLeg	1.431		L_LowLeg	0.609
+L_UpLeg	1.252		Head	0.433
+Sternum	0.897		L_Foot	0.038
+R_LowLeg	0.829		R_Foot	0.002
+R_LowArm	0.795			
+
+Download: Download high-res image (265KB)
+Download: Download full-size image
+Fig. 4. Left: Demonstration of joint number (green) and position of IMUs (blue). Right: The visualization of the weight matrix. The horizontal axis represents the position of IMUs, and the vertical axis represents the joint number.
+
+
+Download: Download high-res image (311KB)
+Download: Download full-size image
+Fig. 5. Position visualization of IMUs. The red block represents the IMU that was used.
+
+
+Download: Download high-res image (486KB)
+Download: Download full-size image
+Fig. 6. Qualitative analysis of the different numbers of IMUs. Upper: self-occlusion, some parts of the body are covered by other parts of the body. Lower: object-occlusion, the white block covers the body. Abnormal: unnatural estimation results from the vision-based approach because of occlusion. The green edges of the estimated results mean the right part of the body, while the pink edges represent the left part.
+
+Table 4. The relationship between the number of IMUs and the results.
+
+Number	Normal	Occlusion	IROCN
+13	26.4	26.5	0.3%
+10	28.7	28.8	0.3%
+8	36.1	36.6	1.4%
+5	39.3	41.6	5.9%
+0	54.8	67.4	23.0%
+4.3. Clinical situation simulation
+Two hypothetical situations that occurred in clinical environments are frequently used for evaluation, Constant Occlusion in Section 4.3.1 and Fast-changing in Section 4.3.2.
+4.3.1. Constant occlusion
+Constant Occlusion means that when a patient stands behind a desk or other obstacle for a long time or passes through a bench, the patient’s lower body becomes invisible for a long time. We adopt the actions of walking in the dataset for analysis. Instead of the training dataset randomly adding obstacles to the image, the data we evaluated is gray blocks that moved as the person moved, ensuring that the lower body is completely hidden. Fig. 7 is an example of Constant-Occlusion. We experimented with the conditions of 13, 10, 8, and 5 IMUs mentioned before and calculated the P-MPJPE only in the lower limb. The results are presented in Table 5. As shown in the table, the effect of overcoming occlusion with five IMUs is very close to that of 13 IMUs (4.3% improvement with five IMUs and 4.0% improvement with 13 IMUs).
+Table 5. The relationship between the number of IMUs and the results in Constant Occlusion.
+
+IMUs	Normal	Constant
+Occlusion	IROCN
+13	19.8	20.6	4.0%
+10	24.0	24.8	3.3%
+8	23.0	24.1	4.8%
+5	37.2	38.8	4.3%
+
+Download: Download high-res image (185KB)
+Download: Download full-size image
+Fig. 7. Constant Occlusion on the lower limb. We detect the anchor box of human and cover the lower limb with a gray block.
+
+4.3.2. Fast-changing Occlusion
+Another occlusion scenario that often appears in the clinical environment is Fast-changing occlusion. When the patient moves in front of obstacles, the shape, size, and position of the invisible part change randomly. The experiment is designed to verify the effectiveness of models in these cases. Moreover, the relationship between occlusion severities and the corresponding recoverability of the proposed method is also worth verifying. We adopt all the actions in the dataset for evaluation, which is different from Constant Occlusion. Referring to the previous study (Sárándi et al., 2018a), the Degree of Occlusion was adopted to control the severity of occlusion, that is, the percentage of occluded pixels inside the person’s bounding box.
+We calculate the occlusion area by the human anchor box and degrees of occlusions, and then we randomly decide the center position of the occlusion block within the anchor box. Height and width meet area restrictions. Fig. 8 shows examples of occlusion at 20% and 70%. The results are shown in Fig. 9. The vertical axis is the error calculated by P-MPJPE. The horizontal axis represents the Degree of Occlusion. With the increase in the Degree of Occlusion, the accuracy does not change significantly, which proves that five IMUs were sufficient to overcome occlusion.
+
+Download: Download high-res image (159KB)
+Download: Download full-size image
+Fig. 8. Different Degree of Occlusion. Left: 20%, Right: 70%.
+
+
+Download: Download high-res image (135KB)
+Download: Download full-size image
+Fig. 9. Relationship between Degree of occlusion and recoverability in different kinds of IMU cases.
+
+4.4. Ablation studies
+4.4.1. Ablation study for synthesis occlusion and IMUs
+To clearly show the contribution of using synthesis occlusion data and fusing the camera with IMUs, we add these components step by step to see the change in robustness. The results are listed in Table 6. Synthesis represents using synthetic occlusion in the training dataset. Normal represents testing the performance in normal situations, while Occlusion means testing the performance in the case of occlusion. IMU denotes whether IMU fusing was performed or not. As the baseline without synthesis occlusion for training and IMUs, the level of accuracy was lower in the occlusion case compared to the normal case, which indicates the failure to correct the pose. When only using IMUs, the levels of robustness and accuracy are higher when only trained with synthesis occlusion compared to other cases (the error of only using IMUs increases by 9.1% in the occlusion case; when using only synthesis occlusion, it increases by 23%). Interestingly, through the combination of synthesis occlusion for training and IMUs, the level of robustness improves significantly (the error rises by only 0.4% in the occlusion case). We consider that the huge gap between unnatural and normal poses can significantly stimulate the network to correct poses using IMUs.
+Table 6. Comparison between the effect of using IMUs and occlusion augmentation to the result.
+
+Synthesis	IMUs	Normal	Occlusion	IROCN
+Empty Cell		53.1	74.1	39.5%
+✔		54.8	67.4	23.0%
+Empty Cell	✔	32.8	35.8	9.1%
+✔	✔	26.4	26.5	0.4%
+4.4.2. Ablation study for the Sensor-Reshape layer
+To test the effectiveness of the proposed Sensor-Reshape layer, we compare it to a simple linear layer and transpose the convolutional layer, which is most popular and used for fusing IMU information in previous studies. The results are listed in Table 7. The Sensor-Reshape layer is superior to others because 
+ in this layer controls the modifier range of the joints for each IMU. Without this matrix, IMUs tend to adjust the joints regardless of whether they are related. Therefore, the level of accuracy decreases.
+Table 7. Ablation results for the Sensor-Reshape layer.
+
+Layer	Empty Cell	P-MPJPE
+Linear		39.8
+Transpose Convolution		39.3
+Sensor-Reshape		27.4
+4.4.3. Ablation study for an alternating loss function
+We test the effectiveness of the method by following different training strategies. The first is the baseline, which uses only joint distance loss as follows:
+(10)
+The second is Addition, which adds joint distance loss and bone direction loss as follows:
+(11)
+where parameter a denotes the fusion coefficient, which is taken from 
+ in the experiments and the best value is kept. Finally, the formula for Alternating is shown in Eq. (6). The result is presented in Table 8.
+The improvement of alternating loss functions is not apparent for simple movements such as walking. However, it improved the more unpredictable movements such as Freestyle. This is because, for complex movements, adding directional losses helps reduce uncertainty. However, if the direction loss is directly added to the original loss function, the optimization objective function is too complicated, and it is not easy to find the best point. This is also why the Addiction case does not increase compared to the baseline.
+Table 8. Ablation results for alternating loss.
+
+Loss	Seen (S1, S2, S3)	Unseen (S4, S5)	Mean
+Empty Cell	Walking	Acting	Freestyle	Walking	Acting	Freestyle	Empty Cell
+Baseline	18.1	19.5	35.3	27.5	33.4	45.6	28.2
+Addition	18.6	19.5	37.1	26.8	33.4	47.1	28.7
+Alternating	18.2	18.7	33.5	27.2	32.3	43.9	27.3
+For the task of 3D pose estimation, alternating the two loss functions has good results. For other deep learning tasks, such as classification, semantic segmentation, etc., it is also worth exploring how the second loss function is determined and whether it is effective to have an alternating loss.
+5. Discussion
+The core idea of this study is to fuse a small number of IMUs to solve the occlusion in the camera caused by the limited space and various obstacles. We discuss occlusion solving and data fusion separately. Additionally, we compare our approach with studies using only IMUs. Finally, we discuss the feasibility of the clinical application and its limitations.
+5.1. Occlusion solving
+Compared with vision-based data-augmentation studies (Sárándi et al., 2018a, Sárándi et al., 2018b), which add some objects in images for training, we apply extra devices to modify 3D poses further. Although it is simple and does not require other computation, two problems were shown in the previous study: (a) Different occlusion-adding methods in training significantly influenced the preference for solving occlusion in testing, and this phenomenon became apparent with the increase in the degree of occlusion. (b) The level of accuracy decreased with the degree of occlusion, despite the data augmentation strategy. The two problems do not show in the proposed method. The random addition method is used in our training, while the simple block test is used in Section 4.3.2. The results show that even if only five IMUs are used, our results are still stable, and the error does not change with the degree of occlusion.
+Compared with the study of De-Occlusion (Zhou et al., 2021), which recovers the invisible parts through semantic information, the performances are similar when dealing with a small-area occlusion. For the case of large-area occlusions where the whole upper body or lower body is entirely invisible, our approach is robust because the IMU result remains the same despite how the semantic information is broken in the camera.
+Finally, we compare the proposed method with the time-series-based approach (Cheng et al., 2020). Their method works well for Fast-changing Occlusion but not for Constant Occlusion because all of the frames used for the estimation are affected by occlusion. A summary of the comparison with existing methods can be found in Table 9.
+Table 9. Compare with other occlusion solving researches.
+
+Method	Advantages	Limitations
+Vision-based data augmentation: adds objects in images for training dataset (Sárándi et al., 2018b)	Improves the estimation result in the low level of occlusion and does not require other computation	Improvement is limited; hard to use in large area occlusion
+De-Occlusion: recovers the invisible parts through semantic information (Zhou et al., 2021)	Performs well in the low level of occlusions	Hard to use in large area occlusion; high computational overhead
+Time-series-based: estimates the occluded frame by the non-occlusion frame surround (Cheng et al., 2020)	Performs well in fast-changing occlusion	Cannot be used in real-time applications; cannot estimate constant occlusion
+Our method: integrates IMU information for estimation	Suitable for most occlusion scenarios with high robustness	Requires a few IMUs attached to the human body
+5.2. Fuse IMUs with camera
+In comparison, our purpose is unlike those of other fusion of IMUs and camera studies (Gilbert et al., 2019, Malleson et al., 2017, Marcard et al., 2016, Huang et al., 2020, Zhang et al., 2020a, Zhang et al., 2020b). They tend to fuse IMU to increase accuracy and robustness in self-occlusion, while we focus on how to maintain the robustness of occlusion when reducing the number of devices for application convenience. Our method only relies on monocular cameras and a small number of IMUs, which is more conducive to application in clinical scenes. For previous studies, Malleson et al. (2017) and Huang et al. (2020) used eight cameras and 13 IMUs; Marcard et al. (2018) used one camera and 13 IMUs; Zhang et al., 2020a, Zhang et al., 2020b used four cameras and eight IMUs. We believe many IMUs are unnecessary for overcoming occlusion because some constraint relations exist in the human joint movement. The comparison of numerical accuracy can be found in Supplementary Materials E.
+5.3. Compared with the IMU-only approach
+We notice that of the five IMU combinations obtained through our inverse analysis, the IMUs are concentrated in the upper leg and upper arm. This differs from some prior studies using spare IMUs (Huang et al., 2018, Yi et al., 2021, Yi et al., 2022) to estimate the pose, which placed the IMUs at the end of the limbs. It is because the camera easily captures the end of the limb in the camera IMU fusion approach. In contrast, the upper part is more uncertain because of the occlusion effect; therefore, the IMU at these locations is more important. We consider that at least one camera is necessary for clinical application because IMUs can never capture global information. The pre-defined human model is required, such as bone length or body shape, which hinders the generalization application for different patients. Additionally, IMUs have a drift problem, which is difficult to overcome without the help of the camera.
+5.4. Feasibility of the clinical application
+For the hardware part, the proposed solution requires a single RGB camera, a small number of IMUs, and a PC that provides for computing. The IMU needs to be of the type with Bluetooth communication. The computer with the GTX 1070 GPU is sufficient for image processing in the proposed framework. For the software part, the computer needs to have libraries for deep learning such as Pytorch installed for use. The hardware and software required are easy to meet in a clinical setting. In rehabilitation, patients are sometimes away from the camera, which makes it difficult to capture their poses. A low-resolution (LR) recognition technique (Deshpande et al., 2020) would help to overcome this situation.
+5.5. Limitations
+Because it is difficult to directly gather the occlusion data from a real clinical environment, the proposed method was only tested in a simulation environment. Additionally, because the quaternion of IMUs is calculated from the row data magnetometer, which is susceptible to the strong magnetic field, the proposed method is not suitable for strong magnetic environments. In clinical environments, specific devices that generate powerful magnetic fields could affect the magnetometer of IMUs and the estimation performance. The estimation method of the quaternion of IMUs that do not rely on magnetometers or some filtering algorithms is expected to improve this problem.
+6. Conclusion
+In this study, we reduce the number of devices for camera-IMU-based 3D human pose estimation while keeping the occlusion’s robustness as much as possible, which is expected to be utilized in the clinical area. We propose a lightweight deep learning-based approach that estimates the 3D human pose robustly through one camera with the help of IMUs. The method contains a novel calculation layer that fuses the IMUs information with the camera more effectively by avoiding the overadjustment. Further, it includes a new strategy of training networks with alternating loss functions to improve the model performance in predicting challenging cases. By inversely analyzing the weight parameters, we determined which IMUs are important for model estimating and reduced the number of IMUs so that the model can maintain high occlusion robustness. We have experimentally simulated two kinds of occlusion that frequently occur in clinical environments, and the results show that even five IMUs are sufficient for overcoming occlusion.
+There are two directions to continue the research in the future. One is to expand the technology of this study, such as achieving indoor precision positioning based on a camera and a small number of IMUs or expanding to multi-person real-time pose estimation. The other direction is in clinical applications, for example, the diagnosis of potential diseases by the 3D motion pose of patients. Pioneering research (Hass et al., 2012, Sijobert et al., 2015) has used a single IMU to collect patient gait data and identify mild Parkinson’s patients based on these data. The whole-body 3D human pose recognition is expected to surpass studies of individual IMUs in terms of accuracy and the types of diseases that can be identified. Alternatively, some wearable rehabilitation devices can be controlled to achieve better rehabilitation results (Kishi et al., 2020).
+CRediT authorship contribution statement
+Changyu Zhao: Conceptualization, Methodology, Software, Visualization, Writing – original draft. Hirotaka Uchitomi: Methodology, Investigation, Writing – review & editing. Taiki Ogata: Methodology, Formal analysis, Writing – review & editing. Xianwen Ming: Validation, Writing – original draft. Yoshihiro Miyake: Investigation, Writing – review, Supervision.
+Declaration of competing interest
+The authors declare that they have no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+Acknowledgments
+This work was supported in part by the Japan Society for the Promotion of Science (JSPS) KAKENHI Grant Number 22K17630, the Japan Science and Technology Agency (JST) CREST Grant Number JPMJCR21C5, and the JST COI-NEXT, Japan , Grant Number JPMJPF2101.
+Ethics statement
+The authors declare that all procedures performed in studies involving human participants were in accordance with the ethical standards of the institutional and/or national research committee.
+Appendix A. Supplementary data
+
+Download all supplementary files included with this article
+What’s this?
+The following is the Supplementary material related to this article.
+Media player
+
+PlayRestartRewindForward
+Volume
+SlowerFasterPreferencesEnter full screen
+0:00 / 0:59Speed: 1xPaused
+Download: Download video (6MB)
+Video S1. Demonstration of Constant Occlusion.
+
+Media player
+
+PlayRestartRewindForward
+Volume
+SlowerFasterPreferencesEnter full screen
+0:00 / 0:59Speed: 1xPaused
+Download: Download video (6MB)
+Video S2. Demonstration of Fast-changing Occlusion.
+
+Download: Download Acrobat PDF file (1MB)
+MMC S1. Supplementary Materials A–F.
+
+Data availability
+Data will be made available on request.
+References
+Andriluka et al., 2010
+Andriluka M., Roth S., Schiele B.
+Monocular 3D pose estimation and tracking by detection
+2010 IEEE Computer Society Conference on Computer Vision and Pattern Recognition, IEEE (2010), pp. 623-630
+CrossrefView in ScopusGoogle Scholar
+Bogo et al., 2016
+Bogo F., Kanazawa A., Lassner C., et al.
+Keep it SMPL: Automatic estimation of 3D human pose and shape from a single image
+European Conference on Computer Vision, Springer, Cham (2016), pp. 561-578
+CrossrefView in ScopusGoogle Scholar
+Bridgeman et al., 2019
+Bridgeman, L., Volino, M., Guillemaut, J.Y., et al., 2019. Multi-person 3D pose estimation and tracking in sports. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition Workshops 2019.
+Google Scholar
+Chen and Ramanan, 2017
+Chen, C.H., Ramanan, D., 2017. 3D human pose estimation= 2D pose estimation+ matching. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. pp. 7035–7043.
+Google Scholar
+Cheng et al., 2020
+Cheng Y., Yang B., Wang B., et al.
+3D human pose estimation using spatio-temporal networks with explicit occlusion training
+Proc. AAAI Conf. Artif. Intell., 34 (07) (2020), pp. 10631-10638
+CrossrefView in ScopusGoogle Scholar
+Deshpande et al., 2020
+Deshpande A., Patavardhan P., Estrela V.V., et al.
+Deep learning as an alternative to super-resolution imaging in UAV systems
+Imaging Sens. Unmanned Aircr. Syst., 2 (9) (2020)
+Google Scholar
+Everingham and Winn, 2012
+Everingham M., Winn J.
+The PASCAL visual object classes challenge 2012 (VOC2012) development kit
+Pattern Analysis, Statistical Modelling, and Computational Learning (2012), pp. 1-45
+[dataset]
+Google Scholar
+Fang et al., 2018
+Fang H.S., Xu Y., Wang W., et al.
+Learning pose grammar to encode human body configuration for 3D pose estimation
+Proc. AAAI Conf. Artif. Intell., 32 (1) (2018)
+Google Scholar
+Gilbert et al., 2019
+Gilbert A., Trumble M., Malleson C., Hilton A., Collomosse J.
+Fusing visual and inertial sensors with semantics for 3D human pose estimation
+IJCV, 127 (4) (2019), pp. 381-397
+CrossrefView in ScopusGoogle Scholar
+Grabner et al., 2018
+Grabner, A., Roth, P.M., Lepetit, V., 2018. 3D pose estimation and 3D model retrieval for objects in the wild. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. pp. 3022–3031.
+Google Scholar
+Guo and Dai, 2018
+Guo X., Dai Y.
+Occluded joints recovery in 3D human pose estimation based on distance matrix
+24th International Conference on Pattern Recognition, ICPR (2018), pp. 1325-1330, 10.1109/ICPR.2018.8545226
+View in ScopusGoogle Scholar
+Hass et al., 2012
+Hass C., Malczak P., Nocera J., et al.
+Quantitative normative gait data in a large cohort of ambulatory persons with Parkinson’s disease
+PLoS One, 7 (2012), Article e42337, 10.1371/journal.pone.0042337
+View in ScopusGoogle Scholar
+Hofmann and Gavrila, 2012
+Hofmann M., Gavrila D.M.
+Multi-view 3D human pose estimation in complex environment
+Int. J. Comput. Vis., 96 (1) (2012), pp. 103-124
+CrossrefView in ScopusGoogle Scholar
+Huang et al., 2018
+Huang, Y., Kaufmann, M., Aksan, E., Black, M.J., Hilliges, O., Pons-Moll, G., 2018. Deep inertial poser learning to reconstruct human pose from sparse inertial measurements in real-time. In: ACM Transactions on Graphics (Proc. SIGGRAPH Asia). p. 37.
+Google Scholar
+Huang et al., 2020
+Huang, F., Zeng, A., Liu, M., et al., 2020. DeepFuse: An IMU-aware network for real-time 3D human pose estimation from multi-view image. In: Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision. pp. 429–438.
+Google Scholar
+Ionescu et al., 2013
+Ionescu C., Papava D., Olaru V., et al.
+Human3. 6 m: Large scale datasets and predictive methods for 3D human sensing in natural environments
+IEEE Trans. Pattern Anal. Mach. Intell., 36 (7) (2013), pp. 1325-1339
+[dataset]
+Google Scholar
+Iskakov et al., 2019
+Iskakov, K., Burkov, E., Lempitsky, V., et al., 2019. Learnable triangulation of human pose. In: Proceedings of the IEEE/CVF International Conference on Computer Vision. pp. 7718–7727.
+Google Scholar
+Jansen et al., 2007
+Jansen B., Temmermans F., Deklerck R.
+3D human pose recognition for home monitoring of elderly
+2007 29th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (2007), pp. 4049-4051, 10.1109/IEMBS.2007.4353222
+View in ScopusGoogle Scholar
+Kishi et al., 2020
+Kishi T., Ogata T., Ora H., et al.
+Synchronized tactile stimulation on upper limbs using a wearable robot for gait assistance in patients with Parkinson’s disease
+Front Robot AI, 7 (2020), p. 10, 10.3389/frobt.2020.00010
+View in ScopusGoogle Scholar
+Lonini et al., 2022
+Lonini L., Moon Y., Embry K., et al.
+Video-based pose estimation for gait analysis in stroke survivors during clinical assessments: A proof-of-concept study
+Digit. Biomark., 6 (1) (2022), pp. 9-18
+CrossrefView in ScopusGoogle Scholar
+Malleson et al., 2017
+Malleson C., Gilbert A., Trumble M., Collomosse J., Hilton A., Volino M.
+Real-time full-body motion capture from video and IMUs
+3DV, IEEE (2017), pp. 449-457
+CrossrefView in ScopusGoogle Scholar
+Marcard et al., 2018
+Marcard, T., Henschel, R., Black, M.J., et al., 2018. Recovering accurate 3D human pose in the wild using IMUs and a moving camera. In: Proceedings of the European Conference on Computer Vision. ECCV, pp. 601–617.
+Google Scholar
+Marcard et al., 2016
+Marcard T., Pons-Moll G., Rosenhahn B.
+Human pose estimation from video and IMUs
+IEEE Trans. Pattern Anal. Mach. Intell., 38 (8) (2016), pp. 1533-1547
+Google Scholar
+Marcard et al., 2017
+Marcard T., Rosenhahn B., Black M.J., et al.
+Sparse inertial poser: Automatic 3D human pose estimation from sparse IMUs
+Comput. Graph. Forum, 36 (2) (2017), pp. 349-360
+Google Scholar
+Nair and Hinton, 2010a
+Nair, V., Hinton, G.E., 2010a. Rectified linear units improve restricted Boltzmann machines. In: Proceedings of the 27th International Conference on Machine Learning. ICML-10.
+Google Scholar
+Nair and Hinton, 2010b
+Nair, V., Hinton, G.E., 2010b. Rectified linear units improve restricted Boltzmann machines. In: ICML. pp. 807–814.
+Google Scholar
+Pavlakos et al., 2017
+Pavlakos, G., Zhou, X., Derpanis, K.G., et al., 2017. Harvesting multiple views for marker-less 3D human pose annotations. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. pp. 6988–6997.
+Google Scholar
+Popa et al., 2017
+Popa, A.I., Zanfir, M., Sminchisescu, C., 2017. Deep multitask architecture for integrated 2D and 3D human sensing. In: Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition. pp. 6289–6298.
+Google Scholar
+Qiu et al., 2019
+Qiu, H., Wang, C., Wang, J., et al., 2019. Cross view fusion for 3D human pose estimation. In: Proceedings of the IEEE/CVF International Conference on Computer Vision. pp. 4342–4351.
+Google Scholar
+Ranjbarzadeh et al., 2022
+Ranjbarzadeh R., Dorosti S., Jafarzadeh Ghoushchi S., et al.
+Nerve optic segmentation in CT images using a deep learning model and a texture descriptor
+Complex Intell. Syst., 8 (4) (2022), pp. 3543-3557
+CrossrefView in ScopusGoogle Scholar
+Roetenberg et al., 2009
+Roetenberg D., Luinge H., Slycke P.
+Xsens MVN: Full 6DOF Human Motion Tracking using Miniature Inertial Sensors: Tech. Rep.
+Xsens Motion Technologies BV (2009), p. 1
+Google Scholar
+Sabatelli et al., 2013
+Sabatelli S., Galgani M., Fanucci L., Rocchi A.
+A double-stage Kalman filter for orientation tracking with an integrated processor in 9-D IMU
+IEEE Trans. Instrum. Meas., 62 (3) (2013), pp. 590-598, 10.1109/TIM.2012.2218692
+View in ScopusGoogle Scholar
+Sárándi et al., 2018a
+Sárándi, I., Linder, T., Arras, K.O., et al., 2018a. How robust is 3D human pose estimation to occlusion?. In: IEEE/RSJ International Conference on Intelligent Robots and Systems. IROS’18.
+Google Scholar
+Sárándi et al., 2018b
+Sárándi I., Linder T., Arras K.O., et al.
+Synthetic occlusion augmentation with volumetric heatmaps for the 2018 ECCV pose track challenge on 3D human pose estimation
+(2018)
+arXiv preprint arXiv:1809.04987
+Google Scholar
+Selvaraju et al., 2017
+Selvaraju, R.R., Cogswell, M., Das, A., et al., 2017. Grad-CAM: Visual explanations from deep networks via gradient-based localization. In: Proceedings of the IEEE International Conference on Computer Vision. pp. 618–626.
+Google Scholar
+Sigal et al., 2010
+Sigal L., Balan A.O., Black M.J.
+Humaneva: Synchronized video and motion capture dataset and baseline algorithm for evaluation of articulated human motion
+Int. J. Comput. Vision, 87 (1–2) (2010), p. 4
+[dataset]
+CrossrefView in ScopusGoogle Scholar
+Sijobert et al., 2015
+Sijobert B., Benoussaad M., Denys J., et al.
+Implementation and validation of a stride length estimation algorithm, using a single basic inertial sensor on healthy subjects and patients suffering from Parkinson’s disease
+Health, 07 (2015), pp. 704-714
+CrossrefGoogle Scholar
+Tedaldi et al., 2014
+Tedaldi D., Pretto A., Menegatti E.
+A robust and easy to implement method for IMU calibration without external equipments
+2014 IEEE International Conference on Robotics and Automation, ICRA (2014), pp. 3042-3049, 10.1109/ICRA.2014.6907297
+View in ScopusGoogle Scholar
+Tian et al., 2021
+Tian Q., Wu Y., Ren X., et al.
+A new optimized sequential method for lung tumor diagnosis based on deep learning and converged search and rescue algorithm
+Biomed. Signal Process. Control, 68 (2021), Article 102761
+View PDF
+View articleView in ScopusGoogle Scholar
+Trumble et al., 2017
+Trumble, M., Gilbert, A., Malleson, C., Hilton, A., Collomosse, J., 2017. Total capture: 3D human pose estimation fusing video and inertial sensors. In: BMVC. pp. 1–13, [dataset].
+Google Scholar
+Wang et al., 2020
+Wang J., Xu E., Xue K., et al.
+3D pose detection in videos: Focusing on occlusion
+(2020)
+arXiv preprint arXiv:2006.13517
+Google Scholar
+Wu et al., 2020
+Wu Q., Xu G., Zhang S., Li Y., Wei F.
+Human 3D pose estimation in a lying position by RGB-D images for medical diagnosis and rehabilitation
+2020 42nd Annual International Conference of the IEEE Engineering in Medicine & Biology Society, EMBC (2020), pp. 5802-5805, 10.1109/EMBC44109.2020.9176407
+View in ScopusGoogle Scholar
+Yang et al., 2018
+Yang, J., Lu, J., Lee, S., et al., 2018. Graph R-CNN for scene graph generation. In: Proceedings of the European Conference on Computer Vision. ECCV, pp. 670–685.
+Google Scholar
+Yi et al., 2021
+Yi X., Zhou Y., Xu F.
+Transpose: Real-time 3D human translation and pose estimation with six inertial sensors
+ACM Trans. Graph., 40 (8) (2021)
+Google Scholar
+Yi et al., 2022
+Yi, X., et al., 2022. Physical Inertial Poser (PIP): Physics-aware Real-time Human Motion Tracking from Sparse Inertial Sensors. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition.
+Google Scholar
+Zhang et al., 2020a
+Zhang, T., Huang, B., Wang, Y., 2020a. Object-occluded human shape and pose estimation from a single color image. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. pp. 7376–7385.
+Google Scholar
+Zhang et al., 2020b
+Zhang, Z., Wang, C., Qin, W., et al., 2020b. Fusing wearable IMUs with multi-view images for human pose estimation: A geometric approach. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. pp. 2200–2209.
+Google Scholar
+Zhang et al., 2021
+Zhang Z., Wang C., Qiu W., et al.
+AdaFuse: Adaptive multiview fusion for accurate human pose estimation in the wild
+Int. J. Comput. Vis., 129 (3) (2021), pp. 703-718
+Google Scholar
+Zhao et al., 2019
+Zhao, L.g., Xi, P., Yu, T., 2019. Semantic Graph Convolutional Networks for 3D Human Pose Regression. In: CVPR.
+Google Scholar
+Zhou et al., 2017
+Zhou X., Qixing H., Xiao S., Xiangyang X., Yichen W.
+Towards 3D human pose estimation in the wild: a weakly-supervised approach
+(2017)
+arXiv:1704.02447
+Google Scholar
+Zhou et al., 2021
+Zhou, Q., Wang, S., Wang, Y., et al., 2021. Human De-occlusion: Invisible Perception and Recovery for Humans. In: Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. pp. 3691–3701.
+Google Scholar
+Cited by (9)
+A deep learning-enabled visual-inertial fusion method for human pose estimation in occluded human-robot collaborative assembly scenarios
+2025, Robotics and Computer Integrated Manufacturing
+
+Show abstract
+Dual source geometric constraints based high precision online pose estimation
+2024, Engineering Applications of Artificial Intelligence
+
+Show abstract
+Improving single image localization through domain adaptation and large kernel attention with synthetic data
+2024, Engineering Applications of Artificial Intelligence
+Citation Excerpt :
+A key component in this realm is image localization, which is vital for the successful implementation of digital twins. Recent studies (Huang et al., 2023; Wu et al., 2022; Zhao et al., 2023) have made significant progress in this area. However, these methods are predominantly designed for environments abundant with real-time, on-site data.
+
+
+Show abstract
+An in-depth evaluation of deep learning-enabled adaptive approaches for detecting obstacles using sensor-fused data in autonomous vehicles
+2024, Engineering Applications of Artificial Intelligence
+Citation Excerpt :
+Additionally, it offers recommendations for further optimizing the performance of ultrasonic sensors under these specific circumstances, ensuring the safe and effective operation of AV in diverse conditions. IMUs, are an integral component in the ever-evolving domain of AV to deduce the vehicle's orientation, its velocity, and its position changes (Zhao, 2023). IMU tracks the vehicle's acceleration and rotational rates, in three dimensions X, Y, and Z, contributing to the understanding of vehicle dynamics and movement (Khanum et al., 2023).
+
+
+Show abstract
+A Survey of the State of the Art in Monocular 3D Human Pose Estimation: Methods, Benchmarks, and Challenges
+2025, Sensors
+Review of models for estimating 3D human pose using deep learning
+2025, Peerj Computer Science
+View all citing articles on Scopus
+© 2023 The Author(s). Published by Elsevier Ltd.
+
+推荐文章
+
+文章指标
+Elsevier logo with wordmark
+About ScienceDirect
+Remote access
+Contact and support
+Terms and conditions
+Privacy policy
+Cookie settings
+All content on this site: Copyright © 2026 Elsevier B.V., its licensors, and contributors. All rights are reserved, including those for text and data mining, AI training, and similar technologies. For all open access content, the relevant licensing terms apply.
+
+RELX group home page
+反馈
+	2 Files	
